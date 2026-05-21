@@ -11,28 +11,28 @@
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      /* Single bold warm accent — pivoted from teal/plum to coral/amber for cleaner visual coherence */
-      --teal: #C75D45;          /* primary coral accent */
-      --teal-dark: #A04230;     /* hover / dark variant */
-      --teal-deep: #7A3520;     /* deep coral for high-contrast surfaces */
-      --teal-soft: rgba(199, 93, 69, 0.10);
-      --plum: #B8860B;          /* secondary amber — used for warm gradient depth */
-      --plum-soft: rgba(184, 134, 11, 0.10);
-      --gold: #C99A3B;
-      --gold-warm: #B8860B;
-      --coral: #DC2626;         /* live-badge red */
+      /* True red on pure white — kill all warm/orange tints */
+      --teal: #DC2626;          /* primary red accent */
+      --teal-dark: #B91C1C;     /* hover / dark variant */
+      --teal-deep: #991B1B;     /* deep red for high-contrast surfaces */
+      --teal-soft: rgba(220, 38, 38, 0.08);
+      --plum: #991B1B;          /* darker red used for subtle gradient depth */
+      --plum-soft: rgba(153, 27, 27, 0.08);
+      --gold: #1A1A1A;          /* repurposed: black accent for premium moments (VIP) */
+      --gold-warm: #1A1A1A;
+      --coral: #DC2626;         /* same as primary */
       --green: #10B981;
-      --red: #ef4444;
-      --orange: #f59e0b;
+      --red: #DC2626;
+      --orange: #DC2626;
       --blue: #3b82f6;
       --text: #1A1A1A;
       --text-light: #4B4B4B;
-      --text-muted: #6B6B6B;
-      --bg: #FAF7F2;
-      --bg-warm: #F5F1E8;
+      --text-muted: #737373;
+      --bg: #FFFFFF;            /* pure white */
+      --bg-warm: #F8F8F8;       /* very light gray */
       --card-bg: #FFFFFF;
-      --card-soft: #F4EFE6;
-      --border: #E8E2D6;
+      --card-soft: #F8F8F8;
+      --border: #E5E5E5;
       --shadow-sm: 0 2px 8px rgba(20, 20, 20, 0.04);
       --shadow-md: 0 8px 28px rgba(20, 20, 20, 0.08);
       --shadow-lg: 0 24px 60px rgba(20, 20, 20, 0.12);
@@ -52,17 +52,7 @@
     body.blackout { background: #000; }
     body.blackout .slide, body.blackout .nav, body.blackout .help-toast { visibility: hidden; }
 
-    /* Subtle paper grain */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image:
-        radial-gradient(circle at 15% 18%, rgba(199, 93, 69, 0.04) 0%, transparent 35%),
-        radial-gradient(circle at 85% 80%, rgba(201, 154, 59, 0.04) 0%, transparent 35%);
-      pointer-events: none;
-      z-index: 0;
-    }
+    /* Clean white — no background tint */
 
     /* ===== SLIDE SYSTEM ===== */
     .slide {
@@ -253,24 +243,24 @@
     }
     .hero-orb-1 {
       width: 560px; height: 560px;
-      background: radial-gradient(circle, #0F7B7B 0%, transparent 70%);
+      background: radial-gradient(circle, #DC2626 0%, transparent 70%);
       top: -140px; left: -120px;
       animation: float1 16s ease-in-out infinite;
-      opacity: 0.55;
+      opacity: 0.18;
     }
     .hero-orb-2 {
       width: 500px; height: 500px;
-      background: radial-gradient(circle, #C99A3B 0%, transparent 70%);
+      background: radial-gradient(circle, #B91C1C 0%, transparent 70%);
       bottom: -120px; right: -100px;
       animation: float2 19s ease-in-out infinite;
-      opacity: 0.45;
+      opacity: 0.14;
     }
     .hero-orb-3 {
       width: 400px; height: 400px;
-      background: radial-gradient(circle, #7C2D6A 0%, transparent 70%);
+      background: radial-gradient(circle, #991B1B 0%, transparent 70%);
       top: 50%; right: 22%;
       animation: float3 21s ease-in-out infinite;
-      opacity: 0.32;
+      opacity: 0.10;
     }
     @keyframes float1 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(48px,32px) scale(1.06)} }
     @keyframes float2 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(-36px,-44px) scale(1.05)} }
@@ -280,8 +270,8 @@
       position: absolute;
       inset: 0;
       background-image:
-        linear-gradient(rgba(199, 93, 69,0.06) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(199, 93, 69,0.06) 1px, transparent 1px);
+        linear-gradient(rgba(220, 38, 38,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(220, 38, 38,0.06) 1px, transparent 1px);
       background-size: 72px 72px;
       mask-image: radial-gradient(circle at center, #000 25%, transparent 78%);
       -webkit-mask-image: radial-gradient(circle at center, #000 25%, transparent 78%);
@@ -330,7 +320,7 @@
       width: 8px; height: 8px;
       border-radius: 50%;
       background: var(--teal);
-      box-shadow: 0 0 0 4px rgba(199, 93, 69,0.18);
+      box-shadow: 0 0 0 4px rgba(220, 38, 38,0.18);
       animation: pulse 2s ease-in-out infinite;
     }
     .hero-title {
@@ -727,7 +717,7 @@
     .reason-card:hover {
       transform: translateY(-8px);
       box-shadow: var(--shadow-md);
-      border-color: rgba(199, 93, 69,0.3);
+      border-color: rgba(220, 38, 38,0.3);
     }
     .reason-icon-wrap {
       width: 64px; height: 64px;
@@ -756,7 +746,7 @@
       background: linear-gradient(135deg, var(--teal) 0%, var(--teal-dark) 100%);
       color: #fff;
       border-color: var(--teal-dark);
-      box-shadow: 0 12px 30px rgba(199, 93, 69,0.25);
+      box-shadow: 0 12px 30px rgba(220, 38, 38,0.25);
       transform: scale(1.02);
     }
     .reason-card.featured:hover { transform: scale(1.02) translateY(-8px); }
@@ -918,8 +908,8 @@
       justify-content: center;
       position: relative;
       background:
-        radial-gradient(circle at 80% 20%, rgba(184, 134, 11,0.06) 0%, transparent 50%),
-        radial-gradient(circle at 20% 80%, rgba(199, 93, 69,0.06) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(153, 27, 27,0.06) 0%, transparent 50%),
+        radial-gradient(circle at 20% 80%, rgba(220, 38, 38,0.06) 0%, transparent 50%),
         #fff;
     }
     .built-body h3 {
@@ -1014,7 +1004,7 @@
       font-size: 24px;
       font-weight: 700;
       margin-bottom: 18px;
-      box-shadow: 0 8px 20px rgba(199, 93, 69,0.3);
+      box-shadow: 0 8px 20px rgba(220, 38, 38,0.3);
     }
     .step-card h3 {
       font-family: 'Newsreader', Georgia, serif;
@@ -1099,10 +1089,7 @@
       padding: 0;
       align-items: stretch;
       justify-content: stretch;
-      background:
-        radial-gradient(circle at 18% 22%, rgba(199, 93, 69,0.10) 0%, transparent 50%),
-        radial-gradient(circle at 82% 78%, rgba(184, 134, 11,0.08) 0%, transparent 50%),
-        var(--bg-warm);
+      background: #FFFFFF;
     }
     .book-fullimage {
       width: 100%;
@@ -1130,10 +1117,7 @@
     /* ===== WORKSHOP FLOW (BUILD / LUNCH / SHOW & TELL / CLOSE) ===== */
     .flow-slide {
       position: relative;
-      background:
-        radial-gradient(circle at 20% 30%, rgba(199, 93, 69,0.08) 0%, transparent 55%),
-        radial-gradient(circle at 80% 70%, rgba(201,154,59,0.06) 0%, transparent 55%),
-        var(--bg);
+      background: #FFFFFF;
     }
     .flow-time {
       display: inline-flex;
@@ -1248,7 +1232,7 @@
         radial-gradient(circle at 30% 30%, rgba(255,255,255,0.4) 0%, transparent 35%),
         linear-gradient(135deg, #C99A3B 0%, #B8860B 100%);
       box-shadow:
-        0 30px 80px rgba(184, 134, 11, 0.3),
+        0 30px 80px rgba(153, 27, 27, 0.3),
         inset 0 -8px 20px rgba(0,0,0,0.15),
         inset 0 8px 20px rgba(255,255,255,0.15);
       margin-top: 24px;
@@ -1398,11 +1382,11 @@
     }
     .schedule-row:last-child { border-bottom: none; }
     .schedule-row:hover {
-      background: rgba(199, 93, 69,0.04);
+      background: rgba(220, 38, 38,0.04);
       transform: translateX(3px);
     }
     .schedule-row.active {
-      background: linear-gradient(90deg, rgba(199, 93, 69,0.05) 0%, transparent 100%);
+      background: linear-gradient(90deg, rgba(220, 38, 38,0.05) 0%, transparent 100%);
       border-left: 3px solid var(--teal);
       padding-left: 14px;
     }
@@ -1412,7 +1396,7 @@
       padding-left: 14px;
     }
     .schedule-row.vip-row {
-      background: linear-gradient(90deg, rgba(184, 134, 11,0.06) 0%, transparent 100%);
+      background: linear-gradient(90deg, rgba(153, 27, 27,0.06) 0%, transparent 100%);
       border-left: 3px solid var(--plum);
       padding-left: 14px;
     }
@@ -1462,7 +1446,7 @@
       margin-top: 1px;
     }
     .schedule-dur.gold { color: var(--gold-warm); background: rgba(201,154,59,0.12); }
-    .schedule-dur.plum { color: var(--plum); background: rgba(184, 134, 11,0.12); }
+    .schedule-dur.plum { color: var(--plum); background: rgba(153, 27, 27,0.12); }
     .schedule-dur.gray { color: var(--text-muted); background: rgba(0,0,0,0.04); }
 
     /* ===== SPEAKER NOTES ===== */
@@ -1523,7 +1507,7 @@
       position: fixed;
       top: 0; left: 0; right: 0;
       height: 3px;
-      background: rgba(199, 93, 69, 0.08);
+      background: rgba(220, 38, 38, 0.08);
       z-index: 100;
     }
     .progress-bar {
@@ -1613,7 +1597,7 @@
       background: linear-gradient(135deg, var(--teal-deep) 0%, #0a4a4a 100%);
       color: #fff;
       border-color: var(--teal-deep);
-      box-shadow: 0 16px 40px rgba(199, 93, 69,0.25);
+      box-shadow: 0 16px 40px rgba(220, 38, 38,0.25);
     }
     .pillar-card.featured::before { background: linear-gradient(90deg, #FFD27A, var(--gold)); }
     .pillar-card.featured .pillar-name { color: #fff; }
@@ -1626,6 +1610,70 @@
     .pillar-card.featured .pillar-desc { color: rgba(255,255,255,0.85); }
     .pillar-card.featured .pillar-tagline { color: #FFD27A; }
     .pillar-card.featured .pillar-icon { background: rgba(255,255,255,0.16); }
+
+    /* ===== TEACHER GRID (3000+ teachers slide) ===== */
+    .teacher-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      max-width: 1280px;
+      width: 100%;
+      margin-top: 26px;
+    }
+    .teacher-tile {
+      position: relative;
+      aspect-ratio: 16/10;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      transition: transform 0.35s cubic-bezier(0.16,1,0.3,1);
+      background: var(--card-soft);
+    }
+    .teacher-tile:hover { transform: translateY(-4px) scale(1.02); }
+    .teacher-tile img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .teacher-tile-caption {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.78) 100%);
+      color: #fff;
+      padding: 28px 14px 10px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+    .teacher-stats {
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 6px;
+      margin-bottom: 4px;
+    }
+    .teacher-stat-num {
+      font-family: 'Newsreader', Georgia, serif;
+      font-style: italic;
+      font-size: clamp(40px, 4.8vw, 60px);
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -0.025em;
+      color: var(--teal);
+    }
+    .teacher-stat-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: 6px;
+      text-align: center;
+    }
 
     /* ===== STAT TILES (Cowork/Code proof points) ===== */
     .stat-tile-row {
@@ -1879,10 +1927,7 @@
 
     /* ===== SPECTRE MASTERMIND ===== */
     .spectre-slide {
-      background:
-        radial-gradient(circle at 20% 30%, rgba(184, 134, 11,0.12) 0%, transparent 50%),
-        radial-gradient(circle at 80% 70%, rgba(199, 93, 69,0.10) 0%, transparent 50%),
-        var(--bg);
+      background: #FFFFFF;
     }
     .spectre-logo-img {
       max-width: 460px;
@@ -1949,13 +1994,13 @@
     .offer-card:hover {
       transform: translateY(-8px);
       box-shadow: var(--shadow-lg);
-      border-color: rgba(199, 93, 69,0.4);
+      border-color: rgba(220, 38, 38,0.4);
     }
     .offer-card.featured {
       background: linear-gradient(135deg, var(--teal-deep) 0%, var(--plum) 100%);
       color: #fff;
       border-color: var(--plum);
-      box-shadow: 0 16px 44px rgba(184, 134, 11,0.3);
+      box-shadow: 0 16px 44px rgba(153, 27, 27,0.3);
       transform: scale(1.03);
     }
     .offer-card.featured:hover { transform: scale(1.03) translateY(-8px); }
@@ -2209,7 +2254,7 @@
     }
     .agenda-row:last-child { border-bottom: none; }
     .agenda-row:hover {
-      background: rgba(199, 93, 69,0.04);
+      background: rgba(220, 38, 38,0.04);
       transform: translateX(4px);
     }
     .agenda-num {
@@ -2415,7 +2460,50 @@
   <div class="speaker-note">"Afternoon is harder and louder. By 3 PM you'll have something working AND a plan for what's next. The Spectre block is short and pressure-free — promise."</div>
 </div>
 
-<!-- 3. FAMILY PHOTO (full-bleed) -->
+<!-- 4. INTRODUCTIONS (10:15 AM · matches agenda) -->
+<div class="slide flow-slide">
+  <div class="stagger" style="display: flex; flex-direction: column; align-items: center; max-width: 1280px; width: 100%;">
+    <div class="flow-time"><span class="clock-dot"></span> 10:15 AM · Around the Room</div>
+    <h2 class="big-text">Quick <em>introductions.</em></h2>
+    <p class="medium-text" style="margin-top: 12px; max-width: 960px;">Two minutes each. <span class="caveat">~ build the room before we build the businesses ~</span></p>
+    <div class="flow-steps" style="grid-template-columns: repeat(3, 1fr); max-width: 1180px;">
+      <div class="flow-step">
+        <div class="flow-step-num">01</div>
+        <h4>Your business</h4>
+        <p>What do you do? Who do you serve? One sentence is enough.</p>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-num">02</div>
+        <h4>The expensive one</h4>
+        <p>What's the most expensive — or most time-consuming — task in your business right now?</p>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-num">03</div>
+        <h4>What AI could take</h4>
+        <p>What could AI realistically take off your plate? Be honest, be specific.</p>
+      </div>
+    </div>
+    <p class="flow-duration">15 minutes total · then we start</p>
+  </div>
+  <div class="speaker-note">"Two minutes. Three answers. Don't pitch yourself — describe the actual problem. The thing you said you'd 'get around to' three years ago. That's what we're going to build for you today."</div>
+</div>
+
+<!-- 5. LIVE CLAUDE CODE DEMO — kickoff right away so Claude builds in background -->
+<div class="slide">
+  <div class="stagger" style="display: flex; flex-direction: column; align-items: center; max-width: 1280px;">
+    <div class="live-badge"><span class="live-dot"></span> Live · Right Now</div>
+    <h2 class="title">Watch Claude Code <em>build a website.</em></h2>
+    <p class="subtitle">No template. No drag-and-drop. Just a prompt — and a real, working site in minutes. We start it now and let it work while we talk.</p>
+    <div class="stat-row">
+      <div class="stat"><div class="stat-num" data-target="1">0</div><div class="stat-label">Prompt</div></div>
+      <div class="stat"><div class="stat-num" data-target="0">0</div><div class="stat-label">Hand-Written Code</div></div>
+      <div class="stat"><div class="stat-num">∞</div><div class="stat-label">What's Possible</div></div>
+    </div>
+  </div>
+  <div class="speaker-note">Kick this off live BEFORE saying who you are. Let the room SEE Claude start typing. Then say: "While that works in the background — let me tell you who I am."</div>
+</div>
+
+<!-- 6. FAMILY PHOTO (full-bleed) -->
 <div class="slide full-photo-slide">
   <div class="full-photo-wrap">
     <img src="assets/mike-family.png" alt="Mike Maitland and his family in Thailand" />
@@ -2426,21 +2514,6 @@
     </div>
   </div>
   <div class="speaker-note">"I live in Thailand with my wife and five kids. One's just started university in the UK — so we're spread across continents now."</div>
-</div>
-
-<!-- 3. LIVE CLAUDE CODE DEMO -->
-<div class="slide">
-  <div class="stagger" style="display: flex; flex-direction: column; align-items: center; max-width: 1280px;">
-    <div class="live-badge"><span class="live-dot"></span> Live · Right Now</div>
-    <h2 class="title">Watch Claude Code <em>build a website.</em></h2>
-    <p class="subtitle">No template. No drag-and-drop. Just a prompt — and a real, working site in minutes.</p>
-    <div class="stat-row">
-      <div class="stat"><div class="stat-num" data-target="1">0</div><div class="stat-label">Prompt</div></div>
-      <div class="stat"><div class="stat-num" data-target="0">0</div><div class="stat-label">Hand-Written Code</div></div>
-      <div class="stat"><div class="stat-num">∞</div><div class="stat-label">What's Possible</div></div>
-    </div>
-  </div>
-  <div class="speaker-note">Kick this off live before continuing. Let the room SEE it happen. Then say: "While that works, let me tell you who I am."</div>
 </div>
 
 <!-- 4. MY STORY (YouTube embed) -->
@@ -2488,7 +2561,7 @@
         </li>
         <li class="about-item">
           <div class="about-icon">🌏</div>
-          <div><strong>Teach English Abroad programs.</strong><span class="muted">Sending hundreds of teachers from the West to classrooms across Asia.</span></div>
+          <div><strong>Teach English Abroad programs.</strong><span class="muted"><span class="bold teal-text">3,000+</span> teachers placed · 1,500+ in Thailand · 13 years running.</span></div>
         </li>
         <li class="about-item">
           <div class="about-icon">🏆</div>
@@ -2500,7 +2573,69 @@
   <div class="speaker-note">Land the storytelling expertise first — that's the through-line for the day. Don't rush the smell-great joke. Pause. Let them laugh. Move on.</div>
 </div>
 
-<!-- 7. THE WORLD HAS CHANGED -->
+<!-- 9. 3,000+ TEACHERS PLACED — case study credibility for About Mike section -->
+<div class="slide">
+  <div class="stagger" style="display: flex; flex-direction: column; align-items: center; max-width: 1340px; width: 100%;">
+    <p class="eyebrow">By the numbers</p>
+    <h2 class="title" style="margin-bottom: 8px;">3,000+ teachers. <em>1,500+ in Thailand.</em></h2>
+    <p class="subtitle" style="margin-bottom: 4px;">13 years. 10 countries. One family business. <span class="caveat">~ every one of them placed by a real person on our team ~</span></p>
+    <div class="teacher-stats">
+      <div>
+        <div class="teacher-stat-num">3,000+</div>
+        <div class="teacher-stat-label">teachers placed</div>
+      </div>
+      <div>
+        <div class="teacher-stat-num">1,500+</div>
+        <div class="teacher-stat-label">in Thailand alone</div>
+      </div>
+      <div>
+        <div class="teacher-stat-num">10</div>
+        <div class="teacher-stat-label">countries</div>
+      </div>
+      <div>
+        <div class="teacher-stat-num">13<span style="font-size:0.55em">yrs</span></div>
+        <div class="teacher-stat-label">family-run · since 2007</div>
+      </div>
+    </div>
+    <div class="teacher-grid">
+      <div class="teacher-tile">
+        <img src="assets/teachers/sara.jpg" alt="Sara — TEFL Heaven teacher" />
+        <div class="teacher-tile-caption">Sara · Teaching Abroad</div>
+      </div>
+      <div class="teacher-tile">
+        <img src="assets/teachers/kaley.jpg" alt="Kaley — TEFL Heaven teacher" />
+        <div class="teacher-tile-caption">Kaley · Teaching Abroad</div>
+      </div>
+      <div class="teacher-tile">
+        <img src="assets/teachers/emily.jpg" alt="Emily — TEFL Heaven teacher" />
+        <div class="teacher-tile-caption">Emily · Teaching Abroad</div>
+      </div>
+      <div class="teacher-tile">
+        <img src="assets/teachers/michelle.jpg" alt="Michelle — TEFL Heaven teacher" />
+        <div class="teacher-tile-caption">Michelle · Teaching Abroad</div>
+      </div>
+      <div class="teacher-tile">
+        <img src="assets/teachers/christina.jpg" alt="Christina — TEFL Heaven teacher" />
+        <div class="teacher-tile-caption">Christina · Teaching Abroad</div>
+      </div>
+      <div class="teacher-tile">
+        <img src="assets/teachers/faye.jpg" alt="Faye — TEFL Heaven teacher" />
+        <div class="teacher-tile-caption">Faye · Teaching Abroad</div>
+      </div>
+      <div class="teacher-tile">
+        <img src="assets/teachers/daniel.jpg" alt="Daniel — TEFL Heaven teacher" />
+        <div class="teacher-tile-caption">Daniel · Teaching Abroad</div>
+      </div>
+      <div class="teacher-tile">
+        <img src="assets/teachers/maddy.jpg" alt="Maddy — TEFL Heaven teacher" />
+        <div class="teacher-tile-caption">Maddy · Teaching Abroad</div>
+      </div>
+    </div>
+  </div>
+  <div class="speaker-note">"Storytelling marketing isn't a theory for me — it's what I've used to send three thousand people to teach abroad. Half of them came to Thailand. That's how I know it works. That's the engine I'm about to teach you to point at YOUR business."</div>
+</div>
+
+<!-- 10. THE WORLD HAS CHANGED -->
 <div class="slide">
   <p class="eyebrow">In The Last 60 Days</p>
   <h2 class="big-text">The world has just <em>changed.</em></h2>
@@ -3167,7 +3302,7 @@
      ============================================================ -->
 <div class="nav">
   <button class="nav-btn" id="prev-btn" aria-label="Previous slide">←</button>
-  <div class="nav-counter"><span id="cur">1</span> / <span id="total">43</span></div>
+  <div class="nav-counter"><span id="cur">1</span> / <span id="total">45</span></div>
   <button class="nav-btn" id="next-btn" aria-label="Next slide">→</button>
 </div>
 
