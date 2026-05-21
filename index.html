@@ -11,15 +11,16 @@
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --teal: #0F7B7B;
-      --teal-dark: #0A5A5A;
-      --teal-deep: #134E4A;
-      --teal-soft: rgba(15, 123, 123, 0.08);
+      /* Single bold warm accent — pivoted from teal/plum to coral/amber for cleaner visual coherence */
+      --teal: #C75D45;          /* primary coral accent */
+      --teal-dark: #A04230;     /* hover / dark variant */
+      --teal-deep: #7A3520;     /* deep coral for high-contrast surfaces */
+      --teal-soft: rgba(199, 93, 69, 0.10);
+      --plum: #B8860B;          /* secondary amber — used for warm gradient depth */
+      --plum-soft: rgba(184, 134, 11, 0.10);
       --gold: #C99A3B;
       --gold-warm: #B8860B;
-      --plum: #7C2D6A;
-      --plum-soft: rgba(124, 45, 106, 0.08);
-      --coral: #DC2626;
+      --coral: #DC2626;         /* live-badge red */
       --green: #10B981;
       --red: #ef4444;
       --orange: #f59e0b;
@@ -57,7 +58,7 @@
       position: fixed;
       inset: 0;
       background-image:
-        radial-gradient(circle at 15% 18%, rgba(15, 123, 123, 0.04) 0%, transparent 35%),
+        radial-gradient(circle at 15% 18%, rgba(199, 93, 69, 0.04) 0%, transparent 35%),
         radial-gradient(circle at 85% 80%, rgba(201, 154, 59, 0.04) 0%, transparent 35%);
       pointer-events: none;
       z-index: 0;
@@ -279,8 +280,8 @@
       position: absolute;
       inset: 0;
       background-image:
-        linear-gradient(rgba(15,123,123,0.06) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(15,123,123,0.06) 1px, transparent 1px);
+        linear-gradient(rgba(199, 93, 69,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(199, 93, 69,0.06) 1px, transparent 1px);
       background-size: 72px 72px;
       mask-image: radial-gradient(circle at center, #000 25%, transparent 78%);
       -webkit-mask-image: radial-gradient(circle at center, #000 25%, transparent 78%);
@@ -329,7 +330,7 @@
       width: 8px; height: 8px;
       border-radius: 50%;
       background: var(--teal);
-      box-shadow: 0 0 0 4px rgba(15,123,123,0.18);
+      box-shadow: 0 0 0 4px rgba(199, 93, 69,0.18);
       animation: pulse 2s ease-in-out infinite;
     }
     .hero-title {
@@ -353,7 +354,7 @@
     @keyframes wordReveal {
       to { opacity: 1; transform: translateY(0); }
     }
-    .hero-title-accent {
+    .hero-title .hero-title-accent {
       display: block;
       background: linear-gradient(120deg, var(--teal) 0%, var(--plum) 100%);
       -webkit-background-clip: text;
@@ -362,6 +363,7 @@
       font-style: italic;
       font-weight: 600;
       letter-spacing: -0.025em;
+      color: var(--teal); /* fallback for browsers without background-clip:text */
     }
     .hero-subtitle {
       font-family: 'Inter', sans-serif;
@@ -725,7 +727,7 @@
     .reason-card:hover {
       transform: translateY(-8px);
       box-shadow: var(--shadow-md);
-      border-color: rgba(15,123,123,0.3);
+      border-color: rgba(199, 93, 69,0.3);
     }
     .reason-icon-wrap {
       width: 64px; height: 64px;
@@ -754,7 +756,7 @@
       background: linear-gradient(135deg, var(--teal) 0%, var(--teal-dark) 100%);
       color: #fff;
       border-color: var(--teal-dark);
-      box-shadow: 0 12px 30px rgba(15,123,123,0.25);
+      box-shadow: 0 12px 30px rgba(199, 93, 69,0.25);
       transform: scale(1.02);
     }
     .reason-card.featured:hover { transform: scale(1.02) translateY(-8px); }
@@ -916,8 +918,8 @@
       justify-content: center;
       position: relative;
       background:
-        radial-gradient(circle at 80% 20%, rgba(124,45,106,0.06) 0%, transparent 50%),
-        radial-gradient(circle at 20% 80%, rgba(15,123,123,0.06) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(184, 134, 11,0.06) 0%, transparent 50%),
+        radial-gradient(circle at 20% 80%, rgba(199, 93, 69,0.06) 0%, transparent 50%),
         #fff;
     }
     .built-body h3 {
@@ -1012,7 +1014,7 @@
       font-size: 24px;
       font-weight: 700;
       margin-bottom: 18px;
-      box-shadow: 0 8px 20px rgba(15,123,123,0.3);
+      box-shadow: 0 8px 20px rgba(199, 93, 69,0.3);
     }
     .step-card h3 {
       font-family: 'Newsreader', Georgia, serif;
@@ -1098,8 +1100,8 @@
       align-items: stretch;
       justify-content: stretch;
       background:
-        radial-gradient(circle at 18% 22%, rgba(15,123,123,0.10) 0%, transparent 50%),
-        radial-gradient(circle at 82% 78%, rgba(124,45,106,0.08) 0%, transparent 50%),
+        radial-gradient(circle at 18% 22%, rgba(199, 93, 69,0.10) 0%, transparent 50%),
+        radial-gradient(circle at 82% 78%, rgba(184, 134, 11,0.08) 0%, transparent 50%),
         var(--bg-warm);
     }
     .book-fullimage {
@@ -1129,7 +1131,7 @@
     .flow-slide {
       position: relative;
       background:
-        radial-gradient(circle at 20% 30%, rgba(15,123,123,0.08) 0%, transparent 55%),
+        radial-gradient(circle at 20% 30%, rgba(199, 93, 69,0.08) 0%, transparent 55%),
         radial-gradient(circle at 80% 70%, rgba(201,154,59,0.06) 0%, transparent 55%),
         var(--bg);
     }
@@ -1396,11 +1398,11 @@
     }
     .schedule-row:last-child { border-bottom: none; }
     .schedule-row:hover {
-      background: rgba(15,123,123,0.04);
+      background: rgba(199, 93, 69,0.04);
       transform: translateX(3px);
     }
     .schedule-row.active {
-      background: linear-gradient(90deg, rgba(15,123,123,0.05) 0%, transparent 100%);
+      background: linear-gradient(90deg, rgba(199, 93, 69,0.05) 0%, transparent 100%);
       border-left: 3px solid var(--teal);
       padding-left: 14px;
     }
@@ -1410,7 +1412,7 @@
       padding-left: 14px;
     }
     .schedule-row.vip-row {
-      background: linear-gradient(90deg, rgba(124,45,106,0.06) 0%, transparent 100%);
+      background: linear-gradient(90deg, rgba(184, 134, 11,0.06) 0%, transparent 100%);
       border-left: 3px solid var(--plum);
       padding-left: 14px;
     }
@@ -1460,7 +1462,7 @@
       margin-top: 1px;
     }
     .schedule-dur.gold { color: var(--gold-warm); background: rgba(201,154,59,0.12); }
-    .schedule-dur.plum { color: var(--plum); background: rgba(124,45,106,0.12); }
+    .schedule-dur.plum { color: var(--plum); background: rgba(184, 134, 11,0.12); }
     .schedule-dur.gray { color: var(--text-muted); background: rgba(0,0,0,0.04); }
 
     /* ===== SPEAKER NOTES ===== */
@@ -1521,7 +1523,7 @@
       position: fixed;
       top: 0; left: 0; right: 0;
       height: 3px;
-      background: rgba(15, 123, 123, 0.08);
+      background: rgba(199, 93, 69, 0.08);
       z-index: 100;
     }
     .progress-bar {
@@ -1611,7 +1613,7 @@
       background: linear-gradient(135deg, var(--teal-deep) 0%, #0a4a4a 100%);
       color: #fff;
       border-color: var(--teal-deep);
-      box-shadow: 0 16px 40px rgba(15,123,123,0.25);
+      box-shadow: 0 16px 40px rgba(199, 93, 69,0.25);
     }
     .pillar-card.featured::before { background: linear-gradient(90deg, #FFD27A, var(--gold)); }
     .pillar-card.featured .pillar-name { color: #fff; }
@@ -1822,8 +1824,8 @@
     /* ===== SPECTRE MASTERMIND ===== */
     .spectre-slide {
       background:
-        radial-gradient(circle at 20% 30%, rgba(124,45,106,0.12) 0%, transparent 50%),
-        radial-gradient(circle at 80% 70%, rgba(15,123,123,0.10) 0%, transparent 50%),
+        radial-gradient(circle at 20% 30%, rgba(184, 134, 11,0.12) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(199, 93, 69,0.10) 0%, transparent 50%),
         var(--bg);
     }
     .spectre-logo-img {
@@ -1891,13 +1893,13 @@
     .offer-card:hover {
       transform: translateY(-8px);
       box-shadow: var(--shadow-lg);
-      border-color: rgba(15,123,123,0.4);
+      border-color: rgba(199, 93, 69,0.4);
     }
     .offer-card.featured {
       background: linear-gradient(135deg, var(--teal-deep) 0%, var(--plum) 100%);
       color: #fff;
       border-color: var(--plum);
-      box-shadow: 0 16px 44px rgba(124,45,106,0.3);
+      box-shadow: 0 16px 44px rgba(184, 134, 11,0.3);
       transform: scale(1.03);
     }
     .offer-card.featured:hover { transform: scale(1.03) translateY(-8px); }
@@ -2151,7 +2153,7 @@
     }
     .agenda-row:last-child { border-bottom: none; }
     .agenda-row:hover {
-      background: rgba(15,123,123,0.04);
+      background: rgba(199, 93, 69,0.04);
       transform: translateX(4px);
     }
     .agenda-num {
@@ -2234,7 +2236,7 @@
     <h1 class="hero-title">
       <span class="word">AI</span>
       <span class="word">Automation</span>
-      <span class="hero-title-accent"><span class="word">Secrets.</span></span>
+      <span class="word hero-title-accent">Secrets.</span>
     </h1>
     <p class="hero-subtitle">
       <span>Michael Maitland</span>
@@ -2249,15 +2251,14 @@
   <div class="speaker-note">Welcome the room. Set the energy: "By the time we leave today, you'll have seen things that change how you think about your business."</div>
 </div>
 
-<!-- 2. AGENDA — Today's Schedule (time-based) -->
+<!-- 2. AGENDA — MORNING (10:00 — 12:30) -->
 <div class="slide">
-  <div class="stagger" style="display: flex; flex-direction: column; align-items: center; max-width: 1380px; width: 100%;">
-    <p class="eyebrow">Today's Schedule</p>
-    <h2 class="title" style="margin-bottom: 10px;">How the day <em>flows.</em></h2>
-    <p class="subtitle" style="margin-bottom: 4px;">10 AM to 3 PM, plus a VIP hour after. Demos, build sessions, lunch, and a roadmap to take home.</p>
-    <div class="schedule-layout">
-      <div class="schedule-col">
-        <h3>Morning <span class="col-tag">10:00 — 12:30</span></h3>
+  <div class="stagger" style="display: flex; flex-direction: column; align-items: center; max-width: 1100px; width: 100%;">
+    <p class="eyebrow">Today's Schedule · Part 1</p>
+    <h2 class="title" style="margin-bottom: 8px;">Morning <em>flow.</em></h2>
+    <p class="subtitle" style="margin-bottom: 8px;">Introductions, demos, then your first build. <span class="caveat">~ then we eat ~</span></p>
+    <div class="schedule-layout" style="grid-template-columns: 1fr;">
+      <div class="schedule-col" style="max-width: 1080px; margin: 0 auto;">
         <div class="schedule-row">
           <div class="schedule-time">10:00 AM</div>
           <div class="schedule-body">
@@ -2270,7 +2271,7 @@
           <div class="schedule-time">10:15 AM</div>
           <div class="schedule-body">
             <div class="schedule-title">Introductions <em>around the room.</em></div>
-            <div class="schedule-desc">Two minutes each: your business, the most expensive or time-consuming task in it, and what AI could realistically take off your plate.</div>
+            <div class="schedule-desc">Two minutes each: your business, the most expensive or time-consuming task in it, what AI could realistically take off your plate.</div>
           </div>
           <span class="schedule-dur">15 min</span>
         </div>
@@ -2278,7 +2279,7 @@
           <div class="schedule-time">10:30 AM</div>
           <div class="schedule-body">
             <div class="schedule-title">What Claude <em>actually does.</em></div>
-            <div class="schedule-desc">45 minutes on Claude: what it is, what it can do for a business, where agents and automations fit. Live demos, not theory.</div>
+            <div class="schedule-desc">45 minutes on Claude — what it is, what it can do for a business, where agents and automations fit. Live demos, not theory.</div>
           </div>
           <span class="schedule-dur">45 min</span>
         </div>
@@ -2286,7 +2287,7 @@
           <div class="schedule-time">11:15 AM</div>
           <div class="schedule-body">
             <div class="schedule-title">⚡ Automate <em>one business problem.</em></div>
-            <div class="schedule-desc">Pick one problem from your business. Build the AI agent or automation that handles it. Mike works the room one-on-one.</div>
+            <div class="schedule-desc">Pick one problem from your business. Build the AI agent or automation that handles it. Mike works the room one-on-one — every laptop gets attention.</div>
           </div>
           <span class="schedule-dur">75 min</span>
         </div>
@@ -2299,8 +2300,19 @@
           <span class="schedule-dur gold">30 min · own cost</span>
         </div>
       </div>
-      <div class="schedule-col">
-        <h3>Afternoon <span class="col-tag">1:00 — 4:00</span></h3>
+    </div>
+  </div>
+  <div class="speaker-note">"Morning is the unlock. By 12:30 you'll have built one real thing. The build session at 11:15 is when I work the room — raise your hand the second you're stuck."</div>
+</div>
+
+<!-- 3. AGENDA — AFTERNOON (1:00 — 4:00) -->
+<div class="slide">
+  <div class="stagger" style="display: flex; flex-direction: column; align-items: center; max-width: 1100px; width: 100%;">
+    <p class="eyebrow">Today's Schedule · Part 2</p>
+    <h2 class="title" style="margin-bottom: 8px;">Afternoon <em>flow.</em></h2>
+    <p class="subtitle" style="margin-bottom: 8px;">More build, then share, then the path forward. <span class="caveat">~ louder than the morning ~</span></p>
+    <div class="schedule-layout" style="grid-template-columns: 1fr;">
+      <div class="schedule-col" style="max-width: 1080px; margin: 0 auto;">
         <div class="schedule-row active">
           <div class="schedule-time">1:00 PM</div>
           <div class="schedule-body">
@@ -2344,7 +2356,7 @@
       </div>
     </div>
   </div>
-  <div class="speaker-note">Walk through the day at a high level. "10 to 3, then VIP. The two build sessions in red — that's where you do the work and I work the room. Lunch in gold. The mastermind explanation at 2:45 is short, no pressure, just the facts."</div>
+  <div class="speaker-note">"Afternoon is harder and louder. By 3 PM you'll have something working AND a plan for what's next. The Spectre block is short and pressure-free — promise."</div>
 </div>
 
 <!-- 3. FAMILY PHOTO (full-bleed) -->
@@ -2432,61 +2444,61 @@
   <div class="speaker-note">Land the storytelling expertise first — that's the through-line for the day. Don't rush the smell-great joke. Pause. Let them laugh. Move on.</div>
 </div>
 
-<!-- 6. THE WORLD HAS CHANGED -->
+<!-- 7. THE WORLD HAS CHANGED -->
 <div class="slide">
   <p class="eyebrow">In The Last 60 Days</p>
   <h2 class="big-text">The world has just <em>changed.</em></h2>
-  <p class="medium-text" style="margin-top: 16px;">Two things that weren't true two months ago — are true today. <span class="caveat">and most people haven't noticed yet ~</span></p>
+  <p class="medium-text" style="margin-top: 16px;">Two things that weren't true two months ago — are true today. <span class="caveat">~ and most people haven't noticed yet ~</span></p>
   <div class="change-row stagger">
     <div class="change-card">
       <div class="change-num">01</div>
       <h3>AI is now <em>actually</em> smart — and it stopped making mistakes.</h3>
       <p>The latest models reason, double-check themselves, and ship work that holds up. We crossed a line from "interesting demo" to "trusted teammate."</p>
-      <span class="change-tag">Capability Jump</span>
+      <span class="change-tag">65% of orgs now use it · double from 10 months ago<sup style="font-size:0.7em">·McKinsey '26</sup></span>
     </div>
     <div class="change-card">
       <div class="change-num">02</div>
       <h3>Autonomous AI agents are <em>here</em> — and they can use a browser.</h3>
       <p>Tools like <span class="bold teal-text">Open Claw</span> and Claude with computer-use can now open Facebook, follow up on leads, and finish tasks — without you.</p>
-      <span class="change-tag">Autonomy Unlocked</span>
+      <span class="change-tag">Knowledge workers save 6.4 hrs/week per seat<sup style="font-size:0.7em">·McKinsey '26</sup></span>
     </div>
   </div>
-  <div class="speaker-note">Hammer this: "Two months. That's the difference between what was a science demo, and what is now a real employee. Most of your competitors are going to feel this six months from now."</div>
+  <div class="speaker-note">Hammer this: "Two months. The science fiction caught up to your kitchen table. 65% of organizations already use generative AI — that's double from ten months ago. The people in this room who move first this year will spend the next five looking back at it as the cheapest decision they ever made."</div>
 </div>
 
-<!-- 7. 5 REASONS FOR AI -->
+<!-- 8. 5 REASONS FOR AI -->
 <div class="slide">
   <p class="eyebrow">Why You Need This — Now</p>
   <h2 class="title">5 reasons to <em>adopt AI today.</em></h2>
-  <p class="subtitle" style="margin-top: -4px;">Each one alone is enough. Together they change the math of running a business.</p>
+  <p class="subtitle" style="margin-top: -4px;">Each one alone is enough. Together — they change the math of running a business.</p>
   <div class="reasons-grid stagger">
     <div class="reason-card">
       <div class="reason-icon-wrap">⏱️</div>
       <h3>Save Time</h3>
-      <p>Hours of work, done in minutes.</p>
+      <p><span class="bold teal-text">6.4 hrs/week</span> back per seat. Senior staff: 10–12.<sup style="font-size:0.7em; color: var(--text-muted)">·McKinsey '26</sup></p>
     </div>
     <div class="reason-card">
       <div class="reason-icon-wrap">💰</div>
       <h3>Save Money</h3>
-      <p>Replace whole line items in your P&amp;L.</p>
+      <p>Replace whole line items in your P&amp;L — agencies, freelancers, software.</p>
     </div>
     <div class="reason-card">
       <div class="reason-icon-wrap">✨</div>
       <h3>Higher Quality</h3>
-      <p>Better copy, cleaner code, sharper design.</p>
+      <p>Better copy, cleaner code, sharper design — and you, the editor.</p>
     </div>
     <div class="reason-card">
       <div class="reason-icon-wrap">🎯</div>
       <h3>Get Leads</h3>
-      <p>Find, qualify, follow up — automatically.</p>
+      <p>Find, qualify, follow up — <span class="bold teal-text">automatically</span>, while you sleep.</p>
     </div>
     <div class="reason-card featured">
       <div class="reason-icon-wrap">🚀</div>
       <h3>+1,000% Output</h3>
-      <p>One person doing the work of ten.</p>
+      <p>One person doing the work of ten. AI-adopting industries: <span class="bold">4.8× faster</span> productivity growth.</p>
     </div>
   </div>
-  <div class="speaker-note">Land each one with a one-sentence story from your own business. Don't list — sell.</div>
+  <div class="speaker-note">Land each one with a one-sentence story from your own business. Don't list — sell. The 6.4 hours number is McKinsey's 2026 study — say it confidently.</div>
 </div>
 
 <!-- ===== AI BREADTH (slides 8–12) — Chat / Cowork / Code + Desktop Unlock ===== -->
@@ -2643,7 +2655,7 @@
   <div class="speaker-note">"This is the unlock. For 30 years, the most powerful tools have lived in terminals — and that's why only developers got to use them. April 14, that wall came down. The desktop app is what makes everything else in this room possible."</div>
 </div>
 
-<!-- 13. JACK WELCH / GE CAPITAL -->
+<!-- 14. JACK WELCH / GE CAPITAL -->
 <div class="slide">
   <p class="eyebrow">A History Lesson</p>
   <h2 class="big-text">AI in 2026 = the <em>internet in 1995.</em></h2>
@@ -2658,7 +2670,9 @@
     <div class="doubter"><span class="doubter-x">✕</span><span><em>"My business doesn't need a website."</em></span></div>
     <div class="doubter"><span class="doubter-x">✕</span><span><em>"It's not safe. Customers won't trust it."</em></span></div>
   </div>
-  <div class="speaker-note">"Every single person who said one of those lines lost. The same exact conversations are happening today about AI — and the same people will lose again."</div>
+  <p class="small-text" style="margin-top: 26px; font-family: 'Newsreader', Georgia, serif; font-style: italic; font-size: clamp(20px, 2.2vw, 28px); color: var(--text); max-width: 920px;">Today, <span class="bold teal-text">74% of AI's economic value</span> is captured by just <span class="bold teal-text">20% of companies.</span> <span class="caveat">~ same story, new century ~</span></p>
+  <p class="small-text" style="margin-top: 8px; font-size: 13px; color: var(--text-muted);">PwC AI Performance Study · 2026</p>
+  <div class="speaker-note">"Every single person who said one of those lines lost. Today PwC says 74% of AI's economic value goes to 20% of companies — the doubters lose again. The people in this room get to choose which 20% they're in."</div>
 </div>
 
 <!-- 9. TEFL HEAVEN — with screenshot (swapped into this position) -->
@@ -3096,7 +3110,7 @@
      ============================================================ -->
 <div class="nav">
   <button class="nav-btn" id="prev-btn" aria-label="Previous slide">←</button>
-  <div class="nav-counter"><span id="cur">1</span> / <span id="total">43</span></div>
+  <div class="nav-counter"><span id="cur">1</span> / <span id="total">44</span></div>
   <button class="nav-btn" id="next-btn" aria-label="Next slide">→</button>
 </div>
 
