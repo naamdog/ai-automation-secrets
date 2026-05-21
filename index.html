@@ -1627,6 +1627,62 @@
     .pillar-card.featured .pillar-tagline { color: #FFD27A; }
     .pillar-card.featured .pillar-icon { background: rgba(255,255,255,0.16); }
 
+    /* ===== STAT TILES (Cowork/Code proof points) ===== */
+    .stat-tile-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      max-width: 1140px;
+      width: 100%;
+      margin-top: 28px;
+    }
+    .stat-tile {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 26px 22px 22px;
+      text-align: left;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.3s cubic-bezier(0.16,1,0.3,1), box-shadow 0.3s;
+    }
+    .stat-tile:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+    .stat-tile-num {
+      font-family: 'Newsreader', Georgia, serif;
+      font-style: italic;
+      font-size: clamp(36px, 4.4vw, 56px);
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, var(--teal), var(--plum));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 12px;
+      color: var(--teal);
+    }
+    .stat-tile h4 {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: clamp(17px, 1.8vw, 22px);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 6px;
+      letter-spacing: -0.01em;
+    }
+    .stat-tile p {
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(12px, 1.25vw, 14px);
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+    .stat-tile .source {
+      display: block;
+      margin-top: 8px;
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
     /* ===== CAPABILITY LIST ===== */
     .cap-list {
       display: grid;
@@ -2555,42 +2611,92 @@
   <div class="speaker-note">"Chat is information. Cowork is the agent that does things for you. Code is the builder. Three doors. Same technology underneath."</div>
 </div>
 
-<!-- 10. COWORK DEEP DIVE -->
+<!-- 11. COWORK DEEP DIVE -->
 <div class="slide">
-  <div class="stagger" style="display: flex; flex-direction: column; align-items: center; max-width: 1240px;">
+  <div class="stagger" style="display: flex; flex-direction: column; align-items: center; max-width: 1280px; width: 100%;">
     <p class="eyebrow">Pillar 02 · Cowork</p>
-    <h2 class="title">Cowork uses <em>your computer</em> for you.</h2>
-    <p class="subtitle">Anthropic launched it in January. It runs on your desktop — opens apps, clicks, types, sends messages — like a human coworker would.</p>
-    <div class="cap-list">
-      <div class="cap-item"><span class="cap-check">✓</span><span><strong>Computer Use.</strong> Sees your screen. Moves the mouse. Types on the keyboard.</span></div>
-      <div class="cap-item"><span class="cap-check">✓</span><span><strong>Opens any app.</strong> Browsers, spreadsheets, Slack, Facebook, Notion, your CRM.</span></div>
-      <div class="cap-item"><span class="cap-check">✓</span><span><strong>Connects to APIs.</strong> Pulls data, fires off requests, stitches services together.</span></div>
-      <div class="cap-item"><span class="cap-check">✓</span><span><strong>Multi-step workflows.</strong> Follows up on every lead. Sorts your inbox. Writes your invoices.</span></div>
-      <div class="cap-item"><span class="cap-check">✓</span><span><strong>Runs while you sleep.</strong> Hand it a task, walk away, come back to it done.</span></div>
-      <div class="cap-item"><span class="cap-check">✓</span><span><strong>No code required.</strong> You speak. It does. That's the whole interface.</span></div>
+    <h2 class="big-text" style="max-width: 1180px;">If you can do it on a computer —<br/><em>Cowork can do it for you.</em></h2>
+    <p class="medium-text" style="margin-top: 14px; max-width: 1020px;">Anthropic launched it in January 2026. Cowork uses your mouse, keyboard, browser and apps — exactly the way a teammate would. Faster, cheaper, around the clock.</p>
+
+    <div class="stat-tile-row">
+      <div class="stat-tile">
+        <div class="stat-tile-num">70,000</div>
+        <h4>Hours saved at Unilever</h4>
+        <p>Candidate screening across 1.8 million applications — done by AI, not humans.</p>
+        <span class="source">HR · case study</span>
+      </div>
+      <div class="stat-tile">
+        <div class="stat-tile-num">67%</div>
+        <h4>Tickets auto-resolved</h4>
+        <p>Mid-sized e-commerce: 4-hour response time → 12 minutes. CSAT up 23 points.</p>
+        <span class="source">Customer Support · 2026</span>
+      </div>
+      <div class="stat-tile">
+        <div class="stat-tile-num">5 days → 4 hrs</div>
+        <h4>Finance close compressed</h4>
+        <p>Monthly reporting cycle cut from a full week to one afternoon — same accuracy.</p>
+        <span class="source">Finance · enterprise case</span>
+      </div>
     </div>
-    <p class="small-text" style="margin-top: 24px;"><span class="caveat">~ you'll see Cowork do exactly this with Facebook DMs in a few minutes ~</span></p>
+
+    <p class="eyebrow" style="margin-top: 34px; margin-bottom: 14px;">What it actually does for a business</p>
+    <div class="cap-list" style="max-width: 1140px;">
+      <div class="cap-item"><span class="cap-check">✓</span><span><strong>Reads, sorts &amp; replies</strong> to your inbox</span></div>
+      <div class="cap-item"><span class="cap-check">✓</span><span><strong>Follows up on every Facebook lead</strong> personally</span></div>
+      <div class="cap-item"><span class="cap-check">✓</span><span><strong>Onboards clients end-to-end</strong> · docs, accounts, calls</span></div>
+      <div class="cap-item"><span class="cap-check">✓</span><span><strong>Fills spreadsheets</strong> from inbox &amp; PDFs</span></div>
+      <div class="cap-item"><span class="cap-check">✓</span><span><strong>Reconciles bank statements</strong> &amp; flags issues</span></div>
+      <div class="cap-item"><span class="cap-check">✓</span><span><strong>Scrapes competitor prices</strong> daily, reports drift</span></div>
+      <div class="cap-item"><span class="cap-check">✓</span><span><strong>Replies to reviews</strong> on Google &amp; Facebook</span></div>
+      <div class="cap-item"><span class="cap-check">✓</span><span><strong>Audits invoices &amp; receipts</strong> against contracts</span></div>
+    </div>
+    <p class="small-text" style="margin-top: 24px;"><span class="caveat">~ you'll watch Cowork run Facebook DMs in a few minutes ~</span></p>
   </div>
-  <div class="speaker-note">"This is the part most people haven't seen yet. Computer Use is real. It runs Facebook for you, fills your sheets, sends your follow-ups. It's the closest thing we have to a real employee that costs $20 a month."</div>
+  <div class="speaker-note">"Whatever YOU do on a computer — Cowork does. Read this list out loud and watch the room. Almost every business in here has at least three of these eating an hour a day. Multiply that by the year. That's the bill you're paying right now without AI."</div>
 </div>
 
-<!-- 11. CODE DEEP DIVE -->
+<!-- 12. CODE DEEP DIVE -->
 <div class="slide">
-  <div class="stagger" style="display: flex; flex-direction: column; align-items: center; max-width: 1240px;">
+  <div class="stagger" style="display: flex; flex-direction: column; align-items: center; max-width: 1280px; width: 100%;">
     <p class="eyebrow">Pillar 03 · Code</p>
-    <h2 class="title">Code <em>builds things</em> for you.</h2>
-    <p class="subtitle">Not for developers — for anyone who has ever paid an agency to make something.</p>
-    <div class="cap-list">
-      <div class="cap-item"><span class="cap-check">✓</span><span><strong>Whole websites.</strong> The kind you used to pay an agency $20k for.</span></div>
-      <div class="cap-item"><span class="cap-check">✓</span><span><strong>Mobile &amp; web apps.</strong> Internal tools, customer portals, booking systems.</span></div>
-      <div class="cap-item"><span class="cap-check">✓</span><span><strong>Documents &amp; reports.</strong> Sales decks, contracts, proposals — formatted, branded.</span></div>
-      <div class="cap-item"><span class="cap-check">✓</span><span><strong>Automations.</strong> Scripts that run nightly, fetch your data, email the result.</span></div>
-      <div class="cap-item"><span class="cap-check">✓</span><span><strong>Books, games, stories.</strong> The whole Dave the Dinosaur book — built with Code &amp; Cowork.</span></div>
-      <div class="cap-item"><span class="cap-check">✓</span><span><strong>Iterates by prompt.</strong> "Make it more blue. Add a button. Try again." Done.</span></div>
+    <h2 class="big-text" style="max-width: 1180px;">If you'd pay someone to make it —<br/><em>Code can make it for you.</em></h2>
+    <p class="medium-text" style="margin-top: 14px; max-width: 1020px;">Not just for developers. Anything you can describe in plain English — Code builds. Websites, apps, reports, automations, even children's books. Then it iterates by prompt until it's right.</p>
+
+    <div class="stat-tile-row">
+      <div class="stat-tile">
+        <div class="stat-tile-num">55%</div>
+        <h4>Faster than hand-coding</h4>
+        <p>Engineering teams shipping with AI coding agents — 55% faster, 19% fewer bugs.</p>
+        <span class="source">Software Eng · 2026</span>
+      </div>
+      <div class="stat-tile">
+        <div class="stat-tile-num">10 min</div>
+        <h4>To a working expense tracker</h4>
+        <p>Drop in a credit-card export, get a categorized web page back — by a non-developer.</p>
+        <span class="source">Real example · DoP '26</span>
+      </div>
+      <div class="stat-tile">
+        <div class="stat-tile-num">1 afternoon</div>
+        <h4>To this entire deck</h4>
+        <p>Every slide you're looking at — built in one sitting with Code &amp; nothing else.</p>
+        <span class="source">This workshop</span>
+      </div>
     </div>
-    <p class="small-text" style="margin-top: 24px;"><span class="caveat">~ this presentation was built by Code in one afternoon ~</span></p>
+
+    <p class="eyebrow" style="margin-top: 34px; margin-bottom: 14px;">What it actually builds</p>
+    <div class="cap-list" style="max-width: 1140px;">
+      <div class="cap-item"><span class="cap-check">✓</span><span><strong>Whole websites</strong> · the kind an agency charges ฿200k+ for</span></div>
+      <div class="cap-item"><span class="cap-check">✓</span><span><strong>Mobile &amp; web apps</strong> · booking systems, portals, dashboards</span></div>
+      <div class="cap-item"><span class="cap-check">✓</span><span><strong>Documents &amp; reports</strong> · decks, contracts, proposals</span></div>
+      <div class="cap-item"><span class="cap-check">✓</span><span><strong>Internal tools</strong> · ROI calculators, inventory, mini-CRMs</span></div>
+      <div class="cap-item"><span class="cap-check">✓</span><span><strong>Automations &amp; scripts</strong> · nightly jobs, scheduled emails</span></div>
+      <div class="cap-item"><span class="cap-check">✓</span><span><strong>Books, games, stories</strong> · Dave the Dinosaur, in one night</span></div>
+      <div class="cap-item"><span class="cap-check">✓</span><span><strong>Iterates by prompt</strong> · "make it blue · add a button · try again"</span></div>
+      <div class="cap-item"><span class="cap-check">✓</span><span><strong>Deploys it live</strong> · pushes to a real URL when you say "go"</span></div>
+    </div>
+    <p class="small-text" style="margin-top: 24px;"><span class="caveat">~ every line of this slide was made by Code · same engine, different output ~</span></p>
   </div>
-  <div class="speaker-note">"Anything you can describe, Code can build. The Dave book. This presentation. The website Claude's building behind us right now. Same tool."</div>
+  <div class="speaker-note">"Every invoice you've ever paid an agency or a freelancer — Code can do that work. The fun part: it iterates by prompt. You say 'make it blue, add a button, change the headline' — and it does it. The conversation IS the editing tool."</div>
 </div>
 
 <!-- 12. CODE IN ACTION — making slides (Loom) -->
@@ -2967,56 +3073,7 @@
   <div class="speaker-note">Pause. Ask the question for real. Wait for a nod. "Yes? Good. Three options. From most accessible to deepest commitment. Pick the one that makes sense for where you are."</div>
 </div>
 
-<!-- 35. THREE OFFERS GRID -->
-<div class="slide">
-  <p class="eyebrow">Three ways to keep going</p>
-  <h2 class="title">Three offers. <em>Pick yours.</em></h2>
-  <p class="subtitle">From a one-hour brain-pick this afternoon — to a 3-month mastermind seat.</p>
-  <div class="offers-grid stagger">
-    <div class="offer-card">
-      <p class="offer-tier">Offer 01</p>
-      <h3 class="offer-title">3-Hour Build Session</h3>
-      <p class="offer-when">~ one-on-one with Mike ~</p>
-      <div class="offer-price">฿25,000</div>
-      <p class="offer-price-sub">3 hours of my time</p>
-      <ul class="offer-list">
-        <li>We build something real together</li>
-        <li>I teach you how to do it yourself</li>
-        <li>In-person or online — your call</li>
-        <li>Message me to book</li>
-      </ul>
-    </div>
-    <div class="offer-card featured">
-      <p class="offer-tier">Offer 02 · Recurring</p>
-      <h3 class="offer-title">Spectre Mastermind</h3>
-      <p class="offer-when">~ monthly meets ~</p>
-      <div class="offer-price">฿10,000</div>
-      <p class="offer-price-sub">/ 3 months · renewable</p>
-      <ul class="offer-list">
-        <li>2-hour group session every month</li>
-        <li>Exclusive room of AI builders</li>
-        <li>Latest workflows &amp; tools, every meet</li>
-        <li>Online while I'm in UK (Jun 14 – Aug 11)</li>
-      </ul>
-    </div>
-    <div class="offer-card">
-      <p class="offer-tier">Offer 03 · Today</p>
-      <h3 class="offer-title">VIP Hour</h3>
-      <p class="offer-when">~ today at 3pm ~</p>
-      <div class="offer-price">฿1,000</div>
-      <p class="offer-price-sub">1 hour · same venue</p>
-      <ul class="offer-list">
-        <li>Pick my brain on marketing &amp; AI</li>
-        <li>Bring your specific problem</li>
-        <li>Walk out with a plan</li>
-        <li>Happening right after this workshop</li>
-      </ul>
-    </div>
-  </div>
-  <div class="speaker-note">"Look at them all. Pick the one that fits where you are. If you want to taste it — VIP Hour. If you want to build something specific — 3-hour session. If you want the community for the long haul — Mastermind."</div>
-</div>
-
-<!-- 36. OFFER 1 — 3-HOUR SESSION -->
+<!-- OFFER 1 — 3-HOUR SESSION -->
 <div class="slide">
   <div class="stagger" style="display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 1280px;">
     <p class="eyebrow">Offer 01 · One-on-One</p>
@@ -3110,7 +3167,7 @@
      ============================================================ -->
 <div class="nav">
   <button class="nav-btn" id="prev-btn" aria-label="Previous slide">←</button>
-  <div class="nav-counter"><span id="cur">1</span> / <span id="total">44</span></div>
+  <div class="nav-counter"><span id="cur">1</span> / <span id="total">43</span></div>
   <button class="nav-btn" id="next-btn" aria-label="Next slide">→</button>
 </div>
 
