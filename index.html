@@ -463,9 +463,9 @@
       margin-bottom: 22px;
       box-shadow: 0 6px 18px rgba(220, 38, 38, 0.3);
     }
-    .live-badge.green {
-      background: var(--green);
-      box-shadow: 0 6px 18px rgba(16, 185, 129, 0.3);
+    .live-badge.done {
+      background: var(--coral);
+      box-shadow: 0 6px 18px rgba(220, 38, 38, 0.3);
     }
     .live-dot {
       width: 8px; height: 8px;
@@ -1092,110 +1092,376 @@
       align-self: center;
     }
 
-    /* ===== DAVE BOOK PAGE ===== */
+    /* ===== DAVE BOOK PAGE — FULL BLEED, IMAGE ONLY ===== */
     .book-slide {
-      padding: 40px 56px 92px;
+      padding: 0;
+      align-items: stretch;
+      justify-content: stretch;
       background:
-        radial-gradient(circle at 15% 20%, rgba(15,123,123,0.06) 0%, transparent 45%),
-        radial-gradient(circle at 85% 80%, rgba(201,154,59,0.06) 0%, transparent 45%),
+        radial-gradient(circle at 18% 22%, rgba(15,123,123,0.10) 0%, transparent 50%),
+        radial-gradient(circle at 82% 78%, rgba(124,45,106,0.08) 0%, transparent 50%),
+        var(--bg-warm);
+    }
+    .book-fullimage {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 28px;
+    }
+    .book-fullimage img {
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      border-radius: 16px;
+      box-shadow: 0 30px 80px rgba(20, 20, 20, 0.22);
+      animation: bookEnter 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes bookEnter {
+      from { opacity: 0; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    /* ===== WORKSHOP FLOW (BUILD / LUNCH / SHOW & TELL / CLOSE) ===== */
+    .flow-slide {
+      position: relative;
+      background:
+        radial-gradient(circle at 20% 30%, rgba(15,123,123,0.08) 0%, transparent 55%),
+        radial-gradient(circle at 80% 70%, rgba(201,154,59,0.06) 0%, transparent 55%),
         var(--bg);
     }
-    .book-page {
-      display: grid;
-      grid-template-columns: 1.15fr 1fr;
-      gap: 56px;
-      max-width: 1320px;
-      width: 100%;
+    .flow-time {
+      display: inline-flex;
       align-items: center;
+      gap: 12px;
+      background: var(--text);
+      color: var(--bg);
+      padding: 10px 22px;
+      border-radius: 100px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      font-size: clamp(14px, 1.3vw, 17px);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 22px;
+      box-shadow: var(--shadow-md);
     }
-    .book-page.center {
-      grid-template-columns: 1fr;
-      max-width: 900px;
-      text-align: center;
+    .flow-time .clock-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--coral);
+      animation: pulse 1.6s ease-in-out infinite;
     }
-    .book-image {
-      position: relative;
-      border-radius: 22px;
-      overflow: hidden;
-      box-shadow: 0 30px 70px rgba(20, 20, 20, 0.18);
-      border: 8px solid #fff;
-      aspect-ratio: 1/1;
-      background: var(--card-soft);
-      transform: rotate(-1.2deg);
-      transition: transform 0.5s ease;
+    .flow-time.lunch .clock-dot { background: var(--gold); }
+    .flow-time.close .clock-dot { background: var(--green); }
+    .flow-time.vip .clock-dot { background: var(--plum); }
+    .flow-duration {
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(13px, 1.3vw, 16px);
+      color: var(--text-muted);
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      margin-top: 18px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
     }
-    .book-page:hover .book-image { transform: rotate(0deg); }
-    .book-image img {
+    .flow-duration::before {
+      content: '⏱';
+      font-size: 1.1em;
+    }
+    .flow-steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      max-width: 1180px;
       width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
+      margin-top: 32px;
     }
-    .book-image::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      box-shadow: inset 0 0 80px rgba(0,0,0,0.08);
-      pointer-events: none;
-    }
-    .book-page-num {
-      display: inline-block;
-      font-family: 'Caveat', cursive;
-      color: var(--gold-warm);
-      font-size: clamp(22px, 2.2vw, 30px);
-      font-weight: 700;
-      margin-bottom: 6px;
-    }
-    .book-text {
+    .flow-step {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 22px 20px;
       text-align: left;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.35s, box-shadow 0.35s;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
     }
-    .book-text.center { text-align: center; }
-    .book-text h2 {
+    .flow-step:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+    }
+    .flow-step-num {
       font-family: 'Newsreader', Georgia, serif;
-      font-size: clamp(40px, 5vw, 72px);
-      font-weight: 700;
       font-style: italic;
-      line-height: 1.05;
-      letter-spacing: -0.018em;
-      color: var(--text);
-      margin-bottom: 16px;
-    }
-    .book-text h2 em {
-      font-style: italic;
-      background: linear-gradient(120deg, var(--teal), var(--plum));
+      font-size: 24px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--teal), var(--plum));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      line-height: 1;
     }
-    .book-text p {
+    .flow-step h4 {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: clamp(17px, 1.7vw, 22px);
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+      color: var(--text);
+    }
+    .flow-step p {
       font-family: 'Inter', sans-serif;
-      font-size: clamp(15px, 1.5vw, 18px);
+      font-size: clamp(12px, 1.2vw, 14px);
       color: var(--text-muted);
-      line-height: 1.55;
-      max-width: 460px;
+      line-height: 1.45;
     }
-    .book-text.center p { max-width: none; }
-    .book-cover-image {
-      width: 100%;
-      max-width: 540px;
-      aspect-ratio: 1/1;
-      border-radius: 24px;
-      overflow: hidden;
-      box-shadow: 0 36px 80px rgba(20, 20, 20, 0.25);
-      border: 10px solid #fff;
-      margin: 28px auto 0;
-      transform: rotate(0deg);
-      animation: bookFloat 7s ease-in-out infinite;
+    .flow-hand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--coral);
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 100px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      box-shadow: 0 8px 22px rgba(220,38,38,0.3);
+      margin-top: 18px;
     }
-    .book-cover-image img {
+
+    /* ===== LUNCH PLATE VISUAL ===== */
+    .lunch-plate {
+      width: 280px; height: 280px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(255,255,255,0.4) 0%, transparent 35%),
+        linear-gradient(135deg, #C99A3B 0%, #B8860B 100%);
+      box-shadow:
+        0 30px 80px rgba(184, 134, 11, 0.3),
+        inset 0 -8px 20px rgba(0,0,0,0.15),
+        inset 0 8px 20px rgba(255,255,255,0.15);
+      margin-top: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 100px;
+      animation: lunchFloat 5s ease-in-out infinite;
+      position: relative;
+    }
+    @keyframes lunchFloat {
+      0%,100% { transform: translateY(0) rotate(-2deg); }
+      50% { transform: translateY(-10px) rotate(2deg); }
+    }
+    .lunch-plate::before {
+      content: '';
+      position: absolute;
+      inset: 28px;
+      border-radius: 50%;
+      border: 2px dashed rgba(255,255,255,0.25);
+    }
+
+    /* ===== TELEGRAM QR PLACEHOLDER ===== */
+    .telegram-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+      padding: 36px 32px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      box-shadow: var(--shadow-lg);
+      margin-top: 28px;
+      max-width: 380px;
       width: 100%;
-      height: 100%;
-      object-fit: cover;
+    }
+    .qr-box {
+      width: 220px; height: 220px;
+      border-radius: 18px;
+      background:
+        repeating-conic-gradient(var(--text) 0 90deg, transparent 90deg 180deg) 0 0 / 12px 12px,
+        repeating-conic-gradient(var(--text) 0 90deg, transparent 90deg 180deg) 6px 6px / 12px 12px,
+        #fff;
+      position: relative;
+      box-shadow: inset 0 0 0 8px #fff, var(--shadow-sm);
+    }
+    .qr-box::before, .qr-box::after {
+      content: '';
+      position: absolute;
+      width: 50px; height: 50px;
+      background: #fff;
+      border: 8px solid var(--text);
+      border-radius: 6px;
+    }
+    .qr-box::before { top: 14px; left: 14px; }
+    .qr-box::after { top: 14px; right: 14px; }
+    .qr-box-mark {
+      position: absolute;
+      bottom: 14px; left: 14px;
+      width: 50px; height: 50px;
+      background: #fff;
+      border: 8px solid var(--text);
+      border-radius: 6px;
+    }
+    .qr-box-logo {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      background: #2AABEE;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 700;
+      font-size: 24px;
+      box-shadow: 0 0 0 6px #fff;
+    }
+    .telegram-cta {
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      text-align: center;
+    }
+    .telegram-cta .small {
       display: block;
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 500;
+      margin-top: 4px;
     }
-    @keyframes bookFloat {
-      0%,100% { transform: translateY(0) rotate(0); }
-      50% { transform: translateY(-10px) rotate(-1deg); }
+    .telegram-placeholder-note {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      color: var(--text-muted);
+      font-style: italic;
+      margin-top: 12px;
+      text-align: center;
+      letter-spacing: 0.5px;
     }
+
+    /* ===== TIME-BASED AGENDA ===== */
+    .schedule-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      max-width: 1320px;
+      width: 100%;
+      margin-top: 26px;
+      text-align: left;
+    }
+    .schedule-col h3 {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: clamp(22px, 2.4vw, 30px);
+      font-weight: 700;
+      font-style: italic;
+      letter-spacing: -0.01em;
+      margin-bottom: 14px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--border);
+      color: var(--teal);
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+    }
+    .schedule-col h3 .col-tag {
+      font-family: 'Inter', sans-serif;
+      font-style: normal;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .schedule-row {
+      display: grid;
+      grid-template-columns: clamp(80px, 8vw, 100px) 1fr auto;
+      gap: 12px 14px;
+      padding: 12px 10px;
+      border-radius: 10px;
+      align-items: start;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.25s, transform 0.25s;
+    }
+    .schedule-row:last-child { border-bottom: none; }
+    .schedule-row:hover {
+      background: rgba(15,123,123,0.04);
+      transform: translateX(3px);
+    }
+    .schedule-row.active {
+      background: linear-gradient(90deg, rgba(15,123,123,0.05) 0%, transparent 100%);
+      border-left: 3px solid var(--teal);
+      padding-left: 14px;
+    }
+    .schedule-row.lunch-row {
+      background: linear-gradient(90deg, rgba(201,154,59,0.06) 0%, transparent 100%);
+      border-left: 3px solid var(--gold);
+      padding-left: 14px;
+    }
+    .schedule-row.vip-row {
+      background: linear-gradient(90deg, rgba(124,45,106,0.06) 0%, transparent 100%);
+      border-left: 3px solid var(--plum);
+      padding-left: 14px;
+    }
+    .schedule-time {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: clamp(13px, 1.3vw, 16px);
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      padding-top: 1px;
+    }
+    .schedule-body { min-width: 0; }
+    .schedule-title {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: clamp(15px, 1.5vw, 19px);
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      margin-bottom: 3px;
+    }
+    .schedule-title em {
+      font-style: italic;
+      color: var(--teal);
+      font-weight: 600;
+    }
+    .schedule-desc {
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(11px, 1.1vw, 13px);
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+    .schedule-dur {
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--teal);
+      background: var(--teal-soft);
+      padding: 5px 9px;
+      border-radius: 100px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      align-self: start;
+      margin-top: 1px;
+    }
+    .schedule-dur.gold { color: var(--gold-warm); background: rgba(201,154,59,0.12); }
+    .schedule-dur.plum { color: var(--plum); background: rgba(124,45,106,0.12); }
+    .schedule-dur.gray { color: var(--text-muted); background: rgba(0,0,0,0.04); }
 
     /* ===== SPEAKER NOTES ===== */
     .speaker-note {
@@ -1431,7 +1697,7 @@
       z-index: 5;
     }
     .compare-label.before { color: #ef4444; }
-    .compare-label.after { color: var(--green); }
+    .compare-label.after { color: var(--teal); }
     .terminal {
       background: #0d0d0d;
       color: #b3ffd1;
@@ -1539,7 +1805,7 @@
       font-size: 12px;
       color: var(--text-light);
     }
-    .desktop-main .row.green { border-left: 3px solid var(--green); }
+    .desktop-main .row.green { border-left: 3px solid var(--coral); }
     .desktop-main .row.teal { border-left: 3px solid var(--teal); }
     .compare-caption {
       padding: 14px 20px 18px;
@@ -2003,64 +2269,102 @@
   <div class="speaker-note">Welcome the room. Set the energy: "By the time we leave tonight, you'll have seen things that change how you think about your business."</div>
 </div>
 
-<!-- 2. AGENDA — Tonight's Program -->
+<!-- 2. AGENDA — Today's Schedule (time-based) -->
 <div class="slide">
-  <div class="stagger" style="display: flex; flex-direction: column; align-items: center; max-width: 1180px; width: 100%;">
-    <p class="eyebrow">Tonight's Program</p>
-    <h2 class="title" style="margin-bottom: 12px;">What we'll <em>cover.</em></h2>
-    <p class="subtitle" style="margin-bottom: 8px;">Six acts, one evening. Live demos, real stories, working systems — then we eat.</p>
-    <div class="agenda-list">
-      <div class="agenda-row">
-        <div class="agenda-num">01</div>
-        <div class="agenda-text">
-          <div class="agenda-title">The <em>Story.</em></div>
-          <div class="agenda-desc">Who I am, where I came from, and what 13 years in Thailand taught me about building businesses.</div>
+  <div class="stagger" style="display: flex; flex-direction: column; align-items: center; max-width: 1380px; width: 100%;">
+    <p class="eyebrow">Today's Schedule</p>
+    <h2 class="title" style="margin-bottom: 10px;">How the day <em>flows.</em></h2>
+    <p class="subtitle" style="margin-bottom: 4px;">10 AM to 3 PM, plus a VIP hour after. Demos, build sessions, lunch, and a roadmap to take home.</p>
+    <div class="schedule-layout">
+      <div class="schedule-col">
+        <h3>Morning <span class="col-tag">10:00 — 12:30</span></h3>
+        <div class="schedule-row">
+          <div class="schedule-time">10:00 AM</div>
+          <div class="schedule-body">
+            <div class="schedule-title">Arrive · <em>Coffee.</em></div>
+            <div class="schedule-desc">Get a coffee. Find your seat. Laptop open. Claude logged in. Settle in.</div>
+          </div>
+          <span class="schedule-dur gray">—</span>
         </div>
-        <span class="agenda-tag">Intro</span>
+        <div class="schedule-row">
+          <div class="schedule-time">10:15 AM</div>
+          <div class="schedule-body">
+            <div class="schedule-title">Introductions <em>around the room.</em></div>
+            <div class="schedule-desc">Two minutes each: your business, the most expensive or time-consuming task in it, and what AI could realistically take off your plate.</div>
+          </div>
+          <span class="schedule-dur">15 min</span>
+        </div>
+        <div class="schedule-row">
+          <div class="schedule-time">10:30 AM</div>
+          <div class="schedule-body">
+            <div class="schedule-title">What Claude <em>actually does.</em></div>
+            <div class="schedule-desc">45 minutes on Claude: what it is, what it can do for a business, where agents and automations fit. Live demos, not theory.</div>
+          </div>
+          <span class="schedule-dur">45 min</span>
+        </div>
+        <div class="schedule-row active">
+          <div class="schedule-time">11:15 AM</div>
+          <div class="schedule-body">
+            <div class="schedule-title">⚡ Automate <em>one business problem.</em></div>
+            <div class="schedule-desc">Pick one problem from your business. Build the AI agent or automation that handles it. Mike works the room one-on-one.</div>
+          </div>
+          <span class="schedule-dur">75 min</span>
+        </div>
+        <div class="schedule-row lunch-row">
+          <div class="schedule-time">12:30 PM</div>
+          <div class="schedule-body">
+            <div class="schedule-title">Lunch · <em>Que Pasa.</em></div>
+            <div class="schedule-desc">Que Pasa is open and serving — grab lunch at your own cost, or step out. Use it to talk to the room.</div>
+          </div>
+          <span class="schedule-dur gold">30 min · own cost</span>
+        </div>
       </div>
-      <div class="agenda-row">
-        <div class="agenda-num">02</div>
-        <div class="agenda-text">
-          <div class="agenda-title">What <em>just changed.</em></div>
-          <div class="agenda-desc">Why the last 60 days matter more than the last 6 years — and the 5 reasons every business should care.</div>
+      <div class="schedule-col">
+        <h3>Afternoon <span class="col-tag">1:00 — 4:00</span></h3>
+        <div class="schedule-row active">
+          <div class="schedule-time">1:00 PM</div>
+          <div class="schedule-body">
+            <div class="schedule-title">⚡ Build <em>continues.</em></div>
+            <div class="schedule-desc">Finish what you started, or pick a second problem and go again. By 2:30 you have something real working in your business.</div>
+          </div>
+          <span class="schedule-dur">90 min</span>
         </div>
-        <span class="agenda-tag">Context</span>
-      </div>
-      <div class="agenda-row">
-        <div class="agenda-num">03</div>
-        <div class="agenda-text">
-          <div class="agenda-title">The <em>three pillars</em> of AI.</div>
-          <div class="agenda-desc">Chat, Cowork &amp; Code — what each one does, and why the desktop unlock changed everything.</div>
+        <div class="schedule-row">
+          <div class="schedule-time">2:30 PM</div>
+          <div class="schedule-body">
+            <div class="schedule-title">Show <em>&amp; Tell.</em></div>
+            <div class="schedule-desc">Owners share what they built and what it'll save them this year. The room always finishes louder than it started.</div>
+          </div>
+          <span class="schedule-dur gray">—</span>
         </div>
-        <span class="agenda-tag">Framework</span>
-      </div>
-      <div class="agenda-row">
-        <div class="agenda-num">04</div>
-        <div class="agenda-text">
-          <div class="agenda-title">Real <em>case studies.</em></div>
-          <div class="agenda-desc">Jack Welch &amp; the internet. TEFL Heaven rebuilt with AI. The website Claude builds live in this room.</div>
+        <div class="schedule-row">
+          <div class="schedule-time">2:45 PM</div>
+          <div class="schedule-body">
+            <div class="schedule-title">Spectre Mastermind · <em>what's next.</em></div>
+            <div class="schedule-desc">A short explanation of what Mike's mastermind is and who it's for. No pressure — just the facts, for those who want to keep going.</div>
+          </div>
+          <span class="schedule-dur gray">—</span>
         </div>
-        <span class="agenda-tag">Proof</span>
-      </div>
-      <div class="agenda-row">
-        <div class="agenda-num">05</div>
-        <div class="agenda-text">
-          <div class="agenda-title">Dave the <em>Dinosaur.</em></div>
-          <div class="agenda-desc">A bedtime story from my 8-year-old daughter — illustrated and bound by AI overnight.</div>
+        <div class="schedule-row">
+          <div class="schedule-time">3:00 PM</div>
+          <div class="schedule-body">
+            <div class="schedule-title">Close · <em>Telegram QR.</em></div>
+            <div class="schedule-desc">Workshop ends. Telegram QR before you leave. Stay connected to the room.</div>
+          </div>
+          <span class="schedule-dur gray">—</span>
         </div>
-        <span class="agenda-tag">Showcase</span>
-      </div>
-      <div class="agenda-row">
-        <div class="agenda-num">06</div>
-        <div class="agenda-text">
-          <div class="agenda-title">Cowork in action <em>+ the offers.</em></div>
-          <div class="agenda-desc">Live Facebook follow-up demo, then how to keep going with Spectre Mastermind.</div>
+        <div class="schedule-row vip-row">
+          <div class="schedule-time">3:00 — 4:00</div>
+          <div class="schedule-body">
+            <div class="schedule-title">VIP Private Hour <em>with Mike.</em></div>
+            <div class="schedule-desc">VIP holders only. Sit down with Mike, walk through your business, leave with a personal roadmap of which AI agents to build next — and in what order.</div>
+          </div>
+          <span class="schedule-dur plum">VIP · ฿1,000</span>
         </div>
-        <span class="agenda-tag">Close</span>
       </div>
     </div>
   </div>
-  <div class="speaker-note">Set expectations and pace. "Six acts. Each one is short. By the end of act 4 you'll have seen the proof. By the end of act 6, you'll know exactly what to do next."</div>
+  <div class="speaker-note">Walk through the day at a high level. "10 to 3, then VIP. The two build sessions in red — that's where you do the work and I work the room. Lunch in gold. The mastermind explanation at 2:45 is short, no pressure, just the facts."</div>
 </div>
 
 <!-- 3. FAMILY PHOTO (full-bleed) -->
@@ -2391,7 +2695,7 @@
 <!-- 10. WHAT CLAUDE CODE BUILT (no screenshot — site won't be made yet) -->
 <div class="slide">
   <div class="stagger" style="display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 1180px;">
-    <div class="live-badge green"><span class="live-dot"></span> Just Built · In This Room</div>
+    <div class="live-badge done"><span class="live-dot"></span> Just Built · In This Room</div>
     <h2 class="title">Look at what Claude <em>just made.</em></h2>
     <p class="subtitle">Live website. Built in front of you. While we were talking.</p>
     <div class="built-window">
@@ -2482,190 +2786,81 @@
   <div class="speaker-note">Land this: "What used to be impossible for a parent — happens overnight now. Whatever Eva can imagine in words, AI can put on a page. Same engine that's going to run your business."</div>
 </div>
 
-<!-- =================== DAVE THE DINOSAUR BOOK PAGES (13–27) =================== -->
+<!-- =================== DAVE THE DINOSAUR BOOK PAGES — FULL-BLEED IMAGES ONLY =================== -->
 
-<!-- 13. COVER -->
+<!-- COVER -->
 <div class="slide book-slide">
-  <div class="book-page center stagger">
-    <span class="book-page-num">~ a story by Eva ~</span>
-    <div class="book-text center">
-      <h2>Dave the <em>Dinosaur.</em></h2>
-      <p>A bedtime story, told by an 8-year-old. Illustrated by AI overnight.</p>
-    </div>
-    <div class="book-cover-image">
-      <img src="assets/dave/dave-v2-01-cover.jpg" alt="Dave the Dinosaur — cover" />
-    </div>
-  </div>
+  <div class="book-fullimage"><img src="assets/dave/dave-v2-01-cover.jpg" alt="Dave the Dinosaur — cover" /></div>
 </div>
 
-<!-- 14. PAGE 1 -->
+<!-- PAGE 1 — splashing in the pool -->
 <div class="slide book-slide">
-  <div class="book-page stagger">
-    <div class="book-image"><img src="assets/dave/dave-v2-02-splashing-in-the-pool.jpg" alt="Splashing in the pool" /></div>
-    <div class="book-text">
-      <span class="book-page-num">page one</span>
-      <h2>Splashing <em>in the pool.</em></h2>
-      <p>This is Dave. He's the biggest dinosaur in the whole valley — and he loves the water.</p>
-    </div>
-  </div>
+  <div class="book-fullimage"><img src="assets/dave/dave-v2-02-splashing-in-the-pool.jpg" alt="Splashing in the pool" /></div>
 </div>
 
-<!-- 15. PAGE 2 -->
+<!-- PAGE 2 — you're too big to play -->
 <div class="slide book-slide">
-  <div class="book-page stagger">
-    <div class="book-image"><img src="assets/dave/dave-v2-03-youre-too-big-to-play.jpg" alt="You're too big to play with us" /></div>
-    <div class="book-text">
-      <span class="book-page-num">page two</span>
-      <h2>"You're <em>too big</em> to play with us."</h2>
-      <p>The other dinosaurs wouldn't let Dave join in. They said he was too big. Too clumsy. Too much.</p>
-    </div>
-  </div>
+  <div class="book-fullimage"><img src="assets/dave/dave-v2-03-youre-too-big-to-play.jpg" alt="You're too big to play with us" /></div>
 </div>
 
-<!-- 16. PAGE 3 -->
+<!-- PAGE 3 — the kindest dinosaur -->
 <div class="slide book-slide">
-  <div class="book-page stagger">
-    <div class="book-image"><img src="assets/dave/dave-v2-04-the-kindest-dinosaur.jpg" alt="The kindest dinosaur" /></div>
-    <div class="book-text">
-      <span class="book-page-num">page three</span>
-      <h2>But Dave was the <em>kindest</em> dinosaur.</h2>
-      <p>He always shared. He always smiled. He'd help anyone — even the dinosaurs who told him to go away.</p>
-    </div>
-  </div>
+  <div class="book-fullimage"><img src="assets/dave/dave-v2-04-the-kindest-dinosaur.jpg" alt="The kindest dinosaur" /></div>
 </div>
 
-<!-- 17. PAGE 4 -->
+<!-- PAGE 4 — football troubles -->
 <div class="slide book-slide">
-  <div class="book-page stagger">
-    <div class="book-image"><img src="assets/dave/dave-v2-05-football-troubles.jpg" alt="Football troubles" /></div>
-    <div class="book-text">
-      <span class="book-page-num">page four</span>
-      <h2>Football <em>troubles.</em></h2>
-      <p>He tried to play football. He kicked too hard. The ball flew over the trees. Nobody invited him back.</p>
-    </div>
-  </div>
+  <div class="book-fullimage"><img src="assets/dave/dave-v2-05-football-troubles.jpg" alt="Football troubles" /></div>
 </div>
 
-<!-- 18. PAGE 5 -->
+<!-- PAGE 5 — super sad -->
 <div class="slide book-slide">
-  <div class="book-page stagger">
-    <div class="book-image"><img src="assets/dave/dave-v2-06-super-sad.jpg" alt="Super sad" /></div>
-    <div class="book-text">
-      <span class="book-page-num">page five</span>
-      <h2>Dave was <em>super sad.</em></h2>
-      <p>So he walked away. Past the pool. Past the football pitch. Past everyone who didn't want him.</p>
-    </div>
-  </div>
+  <div class="book-fullimage"><img src="assets/dave/dave-v2-06-super-sad.jpg" alt="Super sad" /></div>
 </div>
 
-<!-- 19. PAGE 6 -->
+<!-- PAGE 6 — sleeping under the tree -->
 <div class="slide book-slide">
-  <div class="book-page stagger">
-    <div class="book-image"><img src="assets/dave/dave-v2-07-sleeping-under-the-tree.jpg" alt="Sleeping under the tree" /></div>
-    <div class="book-text">
-      <span class="book-page-num">page six</span>
-      <h2>He slept <em>under a tree.</em></h2>
-      <p>He had no home. No friends. Just the stars, the leaves, and the quiet sound of his big, kind heart.</p>
-    </div>
-  </div>
+  <div class="book-fullimage"><img src="assets/dave/dave-v2-07-sleeping-under-the-tree.jpg" alt="Sleeping under the tree" /></div>
 </div>
 
-<!-- 20. PAGE 7 -->
+<!-- PAGE 7 — looking for work -->
 <div class="slide book-slide">
-  <div class="book-page stagger">
-    <div class="book-image"><img src="assets/dave/dave-v2-08-looking-for-work.jpg" alt="Looking for work" /></div>
-    <div class="book-text">
-      <span class="book-page-num">page seven</span>
-      <h2>So Dave went <em>looking for work.</em></h2>
-      <p>He'd find a way to be useful. Somewhere out there was a job big enough for a big, kind dinosaur.</p>
-    </div>
-  </div>
+  <div class="book-fullimage"><img src="assets/dave/dave-v2-08-looking-for-work.jpg" alt="Looking for work" /></div>
 </div>
 
-<!-- 21. PAGE 8 -->
+<!-- PAGE 8 — meeting Chang -->
 <div class="slide book-slide">
-  <div class="book-page stagger">
-    <div class="book-image"><img src="assets/dave/dave-v2-09-meeting-chang.jpg" alt="Meeting Chang" /></div>
-    <div class="book-text">
-      <span class="book-page-num">page eight</span>
-      <h2>And then he met <em>Chang.</em></h2>
-      <p>Chang was a builder. Strong arms, tired eyes — and a job that was just too big for one man.</p>
-    </div>
-  </div>
+  <div class="book-fullimage"><img src="assets/dave/dave-v2-09-meeting-chang.jpg" alt="Meeting Chang" /></div>
 </div>
 
-<!-- 22. PAGE 9 -->
+<!-- PAGE 9 — Chang's struggles -->
 <div class="slide book-slide">
-  <div class="book-page stagger">
-    <div class="book-image"><img src="assets/dave/dave-v2-10-changs-struggles.jpg" alt="Chang's struggles" /></div>
-    <div class="book-text">
-      <span class="book-page-num">page nine</span>
-      <h2>Chang was <em>struggling.</em></h2>
-      <p>The logs were too heavy. The hill was too steep. The day was too long. He needed help — and he needed it fast.</p>
-    </div>
-  </div>
+  <div class="book-fullimage"><img src="assets/dave/dave-v2-10-changs-struggles.jpg" alt="Chang's struggles" /></div>
 </div>
 
-<!-- 23. PAGE 10 -->
+<!-- PAGE 10 — got a job -->
 <div class="slide book-slide">
-  <div class="book-page stagger">
-    <div class="book-image"><img src="assets/dave/dave-v2-11-got-a-job.jpg" alt="Dave got a job" /></div>
-    <div class="book-text">
-      <span class="book-page-num">page ten</span>
-      <h2>Dave got <em>a job.</em></h2>
-      <p>Big, strong, kind Dave. The very thing that made him "too much" for the others — was exactly what Chang needed.</p>
-    </div>
-  </div>
+  <div class="book-fullimage"><img src="assets/dave/dave-v2-11-got-a-job.jpg" alt="Dave got a job" /></div>
 </div>
 
-<!-- 24. PAGE 11 -->
+<!-- PAGE 11 — got a wife -->
 <div class="slide book-slide">
-  <div class="book-page stagger">
-    <div class="book-image"><img src="assets/dave/dave-v2-12-got-a-wife.jpg" alt="Dave got a wife" /></div>
-    <div class="book-text">
-      <span class="book-page-num">page eleven</span>
-      <h2>Then Dave got <em>a wife.</em></h2>
-      <p>Her name was Daisy. She thought he was the most handsome dinosaur in the world. (She was right.)</p>
-    </div>
-  </div>
+  <div class="book-fullimage"><img src="assets/dave/dave-v2-12-got-a-wife.jpg" alt="Dave got a wife" /></div>
 </div>
 
-<!-- 25. PAGE 12 -->
+<!-- PAGE 12 — a big baby -->
 <div class="slide book-slide">
-  <div class="book-page stagger">
-    <div class="book-image"><img src="assets/dave/dave-v2-13-a-big-baby.jpg" alt="A big baby" /></div>
-    <div class="book-text">
-      <span class="book-page-num">page twelve</span>
-      <h2>And then — <em>a big baby.</em></h2>
-      <p>The biggest baby dinosaur the valley had ever seen. Just like his dad. Just as kind.</p>
-    </div>
-  </div>
+  <div class="book-fullimage"><img src="assets/dave/dave-v2-13-a-big-baby.jpg" alt="A big baby" /></div>
 </div>
 
-<!-- 26. PAGE 13 -->
+<!-- PAGE 13 — everyone plays -->
 <div class="slide book-slide">
-  <div class="book-page stagger">
-    <div class="book-image"><img src="assets/dave/dave-v2-14-everyone-plays.jpg" alt="Everyone plays with Dave" /></div>
-    <div class="book-text">
-      <span class="book-page-num">page thirteen</span>
-      <h2>Now <em>everyone</em> wants to play with Dave.</h2>
-      <p>The same dinosaurs who said he was too big — line up to be his friend now. Funny how that works.</p>
-    </div>
-  </div>
+  <div class="book-fullimage"><img src="assets/dave/dave-v2-14-everyone-plays.jpg" alt="Everyone plays with Dave" /></div>
 </div>
 
-<!-- 27. THE END -->
+<!-- THE END -->
 <div class="slide book-slide">
-  <div class="book-page center stagger">
-    <div class="book-cover-image" style="max-width: 460px;">
-      <img src="assets/dave/dave-v2-15-the-end.jpg" alt="The end" />
-    </div>
-    <div class="book-text center">
-      <span class="book-page-num">~ and that's the story ~</span>
-      <h2>The <em>End.</em></h2>
-      <p>Eva told the story. AI did the rest — overnight. <span class="caveat">~ and now we read it on the big screen ~</span></p>
-    </div>
-  </div>
+  <div class="book-fullimage"><img src="assets/dave/dave-v2-15-the-end.jpg" alt="The end" /></div>
   <div class="speaker-note">Pause here. Let it sink in. "That story you just read — was an 8-year-old plus AI, in one night. Now imagine what your business looks like when AI does the same thing for your sales, your follow-ups, your content."</div>
 </div>
 
@@ -2683,6 +2878,115 @@
 </div>
 
 <!-- ===== SPECTRE MASTERMIND — CLOSER (slides 34–38) ===== -->
+
+<!-- ===== WORKSHOP FLOW — Build / Lunch / Build Continues / Show & Tell ===== -->
+
+<!-- BUILD SESSION 1 -->
+<div class="slide flow-slide">
+  <div class="stagger" style="display: flex; flex-direction: column; align-items: center; max-width: 1280px; width: 100%;">
+    <div class="flow-time"><span class="clock-dot"></span> 11:15 AM · Now You Build</div>
+    <h2 class="big-text">⚡ Pick one problem. <em>Build the agent.</em></h2>
+    <p class="medium-text" style="margin-top: 14px; max-width: 1040px;">Open Claude. Pick the most expensive or time-consuming task in your business. Build the AI agent or automation that handles it. <span class="caveat">~ Mike works the room one-on-one ~</span></p>
+    <div class="flow-steps">
+      <div class="flow-step">
+        <div class="flow-step-num">01</div>
+        <h4>Open Claude</h4>
+        <p>Desktop app. New session. Code or Cowork — your call.</p>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-num">02</div>
+        <h4>Pick the problem</h4>
+        <p>Whatever you said in introductions. The expensive one. The slow one. Pick that.</p>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-num">03</div>
+        <h4>Build it</h4>
+        <p>Describe it like you'd describe it to a smart new hire. Then iterate.</p>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-num">04</div>
+        <h4>Test it</h4>
+        <p>Run it on real data from your business. Make it actually work.</p>
+      </div>
+    </div>
+    <span class="flow-hand"><span style="font-size: 16px;">✋</span> Raise your hand · Mike comes to you</span>
+    <p class="flow-duration">75 minutes · then lunch</p>
+  </div>
+  <div class="speaker-note">"This is where the workshop becomes real. Pick the problem you mentioned in introductions. Don't pick something easy — pick the one that's costing you money. I'm walking around. Raise your hand the second you get stuck."</div>
+</div>
+
+<!-- LUNCH BREAK -->
+<div class="slide flow-slide">
+  <div class="stagger" style="display: flex; flex-direction: column; align-items: center; max-width: 1080px; width: 100%;">
+    <div class="flow-time lunch"><span class="clock-dot"></span> 12:30 PM · Break</div>
+    <h2 class="big-text">Lunch · <em>Que Pasa.</em></h2>
+    <p class="medium-text" style="margin-top: 14px; max-width: 880px;">Kitchen's open. Grab something, step out, or stay and talk shop. <span class="caveat">~ talk to the room ~</span></p>
+    <div class="lunch-plate">🌮</div>
+    <p class="flow-duration">30 min · own cost · back at 1:00 PM sharp</p>
+  </div>
+  <div class="speaker-note">"30 minutes. Use it well — talk to the person next to you. Some of the best deals in this room will be made over lunch, not from the front of the room."</div>
+</div>
+
+<!-- BUILD CONTINUES -->
+<div class="slide flow-slide">
+  <div class="stagger" style="display: flex; flex-direction: column; align-items: center; max-width: 1280px; width: 100%;">
+    <div class="flow-time"><span class="clock-dot"></span> 1:00 PM · Round Two</div>
+    <h2 class="big-text">⚡ Back to <em>building.</em></h2>
+    <p class="medium-text" style="margin-top: 14px; max-width: 1040px;">Finish what you started this morning — or pick a second problem and go again. By 2:30 you'll have something real working in your business.</p>
+    <div class="flow-steps" style="grid-template-columns: repeat(3, 1fr); max-width: 980px;">
+      <div class="flow-step">
+        <div class="flow-step-num">A</div>
+        <h4>Finish round one</h4>
+        <p>Ship it. Polish it. Get it production-ready.</p>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-num">B</div>
+        <h4>Pick problem #2</h4>
+        <p>Done early? Pick the next expensive task and stack another automation.</p>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-num">C</div>
+        <h4>Get unstuck</h4>
+        <p>Hand up. I'm in the room. We'll get you through the hard part.</p>
+      </div>
+    </div>
+    <p class="flow-duration">90 minutes · Show &amp; Tell at 2:30</p>
+  </div>
+  <div class="speaker-note">"Some of you will keep going on what you started. Some of you will be done and ready to stack a second one. Either is right. By 2:30 — something real, in your business, that works."</div>
+</div>
+
+<!-- SHOW & TELL -->
+<div class="slide flow-slide">
+  <div class="stagger" style="display: flex; flex-direction: column; align-items: center; max-width: 1080px; width: 100%;">
+    <div class="flow-time"><span class="clock-dot"></span> 2:30 PM · Show &amp; Tell</div>
+    <h2 class="big-text">What did <em>you make?</em></h2>
+    <p class="medium-text" style="margin-top: 14px; max-width: 920px;">Owners share what they built and what it'll save them this year. <span class="caveat">~ the room always finishes louder than it started ~</span></p>
+    <div style="display: flex; flex-direction: column; gap: 10px; max-width: 720px; width: 100%; margin-top: 28px; text-align: left;">
+      <div class="flow-step" style="flex-direction: row; gap: 18px; align-items: center;">
+        <div class="flow-step-num" style="font-size: 32px; flex-shrink: 0;">⏱</div>
+        <div>
+          <h4 style="margin-bottom: 2px;">2 minutes each.</h4>
+          <p>What you built. What it does. What it'll save you this year.</p>
+        </div>
+      </div>
+      <div class="flow-step" style="flex-direction: row; gap: 18px; align-items: center;">
+        <div class="flow-step-num" style="font-size: 32px; flex-shrink: 0;">📣</div>
+        <div>
+          <h4 style="margin-bottom: 2px;">Loud is good.</h4>
+          <p>Show the live thing. Read out the number. Own the win.</p>
+        </div>
+      </div>
+      <div class="flow-step" style="flex-direction: row; gap: 18px; align-items: center;">
+        <div class="flow-step-num" style="font-size: 32px; flex-shrink: 0;">🤝</div>
+        <div>
+          <h4 style="margin-bottom: 2px;">Then we celebrate.</h4>
+          <p>Mike picks the most surprising build. Small prize, big bragging rights.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="speaker-note">"This is the best part of every workshop. The room is louder at 2:30 than it was at 10. People are buzzing about what they just made. Lean in — applaud each one."</div>
+</div>
 
 <!-- 34. SPECTRE INTRO -->
 <div class="slide spectre-slide">
@@ -2808,33 +3112,55 @@
   <div class="speaker-note">"This is the long game. You can't out-pace AI alone — but you can with a small room of people doing the same thing. The ATD stat is real: 95% better goal completion with regular peer accountability. That's what this room becomes."</div>
 </div>
 
-<!-- 38. OFFER 3 — VIP HOUR (closer, today @ 3pm) -->
+<!-- OFFER 3 — VIP HOUR (3:00–4:00 PM bonus) -->
 <div class="slide">
   <div class="stagger" style="display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 1280px;">
-    <div class="live-badge"><span class="live-dot"></span> Happening Today · 3 PM</div>
-    <h2 class="title">VIP <em>Hour.</em></h2>
+    <div class="live-badge"><span class="live-dot"></span> Bonus Hour · 3:00 – 4:00 PM</div>
+    <h2 class="title">VIP Private <em>Hour.</em></h2>
     <div class="offer-detail">
       <div class="offer-detail-price">
-        <p class="offer-detail-tier">Today Only · 3 PM</p>
-        <h3 class="offer-detail-title">One hour. <em>Your problem.</em></h3>
+        <p class="offer-detail-tier">VIP Only · 3:00 – 4:00 PM</p>
+        <h3 class="offer-detail-title">One hour. <em>Your roadmap.</em></h3>
         <div class="offer-detail-amount">฿1,000</div>
-        <p class="offer-detail-amount-sub">today · same venue · stay after</p>
+        <p class="offer-detail-amount-sub">today · stay seated after Close</p>
         <span class="offer-detail-when"><span class="dot"></span> Right here · 3 PM · today</span>
       </div>
       <div class="offer-detail-content">
-        <h3>If you only do one thing today — do this.</h3>
-        <p>Stay after the workshop. Bring your business, your problem, your half-built idea. For one hour, you get me on your specific challenge — marketing, AI, automations, whatever's stuck. You walk out with a plan and the first piece already built.</p>
+        <h3>Stay an extra hour. Leave with a roadmap.</h3>
+        <p>For VIP-ticket holders only. After the workshop closes at 3:00 PM, we keep going for one more hour — just you, your business, and me. We walk through what you built today, what to build next, and the exact order to do it in.</p>
         <ul>
-          <li>One full hour at this venue, starting at 3 PM</li>
-          <li>Bring your laptop and your specific business question</li>
-          <li>I work on <em>your</em> problem, not a generic example</li>
-          <li>1,000 baht — less than tonight's dinner</li>
+          <li>Sit down with Mike right after Close — no break</li>
+          <li>Walk through <em>your</em> business, not a generic example</li>
+          <li>Leave with the next 3 automations to build, in priority order</li>
+          <li>1,000 baht — grab a VIP ticket today, before 3 PM</li>
         </ul>
-        <p style="margin-top: 18px; font-family: 'Newsreader', Georgia, serif; font-style: italic; font-size: clamp(18px, 1.8vw, 22px); color: var(--text);">If you've been on the fence all evening — <span class="bold teal-text">this is your easy yes.</span></p>
+        <p style="margin-top: 18px; font-family: 'Newsreader', Georgia, serif; font-style: italic; font-size: clamp(18px, 1.8vw, 22px); color: var(--text);">If you want a personal plan — <span class="bold teal-text">this is your easy yes.</span></p>
       </div>
     </div>
   </div>
-  <div class="speaker-note">This is the closer. Stay warm but direct: "If you've been nodding along all evening and you don't know where to start — start here. One thousand baht. Stay in your seat. Three pm. Bring your laptop, bring the problem, walk out with the answer."</div>
+  <div class="speaker-note">"VIP is for the person who wants the personal roadmap — what to build next, and in what order. One thousand baht, one hour, just you and me, right after Close. Grab a VIP ticket before 3 PM."</div>
+</div>
+
+<!-- CLOSE + TELEGRAM QR (3:00 PM — workshop ends) -->
+<div class="slide flow-slide">
+  <div class="stagger" style="display: flex; flex-direction: column; align-items: center; max-width: 1080px; width: 100%;">
+    <div class="flow-time close"><span class="clock-dot"></span> 3:00 PM · Close</div>
+    <h2 class="big-text">Thank you for <em>being here.</em></h2>
+    <p class="medium-text" style="margin-top: 12px; max-width: 880px;">Workshop ends now. Scan the QR to stay in the room — that's where the next workflow, the next case study, and the next workshop drop first.</p>
+    <div class="telegram-card">
+      <div class="qr-box">
+        <div class="qr-box-mark"></div>
+        <div class="qr-box-logo">✈</div>
+      </div>
+      <div class="telegram-cta">
+        Join the Telegram room
+        <span class="small">→ scan with your phone camera ←</span>
+      </div>
+    </div>
+    <p class="telegram-placeholder-note">~ QR placeholder · replace with the actual Telegram invite QR before the workshop ~</p>
+    <p class="small-text" style="margin-top: 22px; font-family: 'Newsreader', Georgia, serif; font-style: italic; font-size: clamp(18px, 1.8vw, 24px); color: var(--text);"><span class="caveat">VIP holders</span> · stay seated · we start the bonus hour now.</p>
+  </div>
+  <div class="speaker-note">"That's the workshop. Scan the QR before you leave — Telegram is where the next thing drops first. VIPs, stay in your seats, we start in two minutes. Everyone else — thank you, see you soon."</div>
 </div>
 
 <!-- ============================================================
@@ -2842,7 +3168,7 @@
      ============================================================ -->
 <div class="nav">
   <button class="nav-btn" id="prev-btn" aria-label="Previous slide">←</button>
-  <div class="nav-counter"><span id="cur">1</span> / <span id="total">40</span></div>
+  <div class="nav-counter"><span id="cur">1</span> / <span id="total">45</span></div>
   <button class="nav-btn" id="next-btn" aria-label="Next slide">→</button>
 </div>
 
