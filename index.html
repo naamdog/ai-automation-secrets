@@ -1887,6 +1887,76 @@
     }
     .offer-stat-label strong { color: var(--text); }
 
+    /* ===== AGENDA ===== */
+    .agenda-list {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 6px;
+      max-width: 1100px;
+      width: 100%;
+      margin-top: 28px;
+      text-align: left;
+    }
+    .agenda-row {
+      display: grid;
+      grid-template-columns: clamp(54px, 5vw, 72px) 1fr auto;
+      gap: 18px;
+      align-items: center;
+      padding: 16px 22px;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.25s, transform 0.25s;
+      border-radius: 10px;
+    }
+    .agenda-row:last-child { border-bottom: none; }
+    .agenda-row:hover {
+      background: rgba(15,123,123,0.04);
+      transform: translateX(4px);
+    }
+    .agenda-num {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: clamp(26px, 3vw, 38px);
+      font-weight: 800;
+      font-style: italic;
+      background: linear-gradient(135deg, var(--teal), var(--plum));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+    .agenda-text { min-width: 0; }
+    .agenda-title {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: clamp(22px, 2.4vw, 30px);
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.012em;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+    .agenda-title em {
+      font-style: italic;
+      color: var(--teal);
+      font-weight: 600;
+    }
+    .agenda-desc {
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(13px, 1.3vw, 16px);
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+    .agenda-tag {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--teal);
+      background: var(--teal-soft);
+      padding: 5px 10px;
+      border-radius: 100px;
+      white-space: nowrap;
+    }
+
     /* ===== RESPONSIVE ===== */
     @media (max-width: 980px) {
       .reasons-grid { grid-template-columns: repeat(2, 1fr); }
@@ -1933,7 +2003,67 @@
   <div class="speaker-note">Welcome the room. Set the energy: "By the time we leave tonight, you'll have seen things that change how you think about your business."</div>
 </div>
 
-<!-- 2. FAMILY PHOTO (full-bleed) -->
+<!-- 2. AGENDA — Tonight's Program -->
+<div class="slide">
+  <div class="stagger" style="display: flex; flex-direction: column; align-items: center; max-width: 1180px; width: 100%;">
+    <p class="eyebrow">Tonight's Program</p>
+    <h2 class="title" style="margin-bottom: 12px;">What we'll <em>cover.</em></h2>
+    <p class="subtitle" style="margin-bottom: 8px;">Six acts, one evening. Live demos, real stories, working systems — then we eat.</p>
+    <div class="agenda-list">
+      <div class="agenda-row">
+        <div class="agenda-num">01</div>
+        <div class="agenda-text">
+          <div class="agenda-title">The <em>Story.</em></div>
+          <div class="agenda-desc">Who I am, where I came from, and what 13 years in Thailand taught me about building businesses.</div>
+        </div>
+        <span class="agenda-tag">Intro</span>
+      </div>
+      <div class="agenda-row">
+        <div class="agenda-num">02</div>
+        <div class="agenda-text">
+          <div class="agenda-title">What <em>just changed.</em></div>
+          <div class="agenda-desc">Why the last 60 days matter more than the last 6 years — and the 5 reasons every business should care.</div>
+        </div>
+        <span class="agenda-tag">Context</span>
+      </div>
+      <div class="agenda-row">
+        <div class="agenda-num">03</div>
+        <div class="agenda-text">
+          <div class="agenda-title">The <em>three pillars</em> of AI.</div>
+          <div class="agenda-desc">Chat, Cowork &amp; Code — what each one does, and why the desktop unlock changed everything.</div>
+        </div>
+        <span class="agenda-tag">Framework</span>
+      </div>
+      <div class="agenda-row">
+        <div class="agenda-num">04</div>
+        <div class="agenda-text">
+          <div class="agenda-title">Real <em>case studies.</em></div>
+          <div class="agenda-desc">Jack Welch &amp; the internet. TEFL Heaven rebuilt with AI. The website Claude builds live in this room.</div>
+        </div>
+        <span class="agenda-tag">Proof</span>
+      </div>
+      <div class="agenda-row">
+        <div class="agenda-num">05</div>
+        <div class="agenda-text">
+          <div class="agenda-title">Dave the <em>Dinosaur.</em></div>
+          <div class="agenda-desc">A bedtime story from my 8-year-old daughter — illustrated and bound by AI overnight.</div>
+        </div>
+        <span class="agenda-tag">Showcase</span>
+      </div>
+      <div class="agenda-row">
+        <div class="agenda-num">06</div>
+        <div class="agenda-text">
+          <div class="agenda-title">Cowork in action <em>+ the offers.</em></div>
+          <div class="agenda-desc">Live Facebook follow-up demo, then how to keep going with Spectre Mastermind.</div>
+        </div>
+        <span class="agenda-tag">Close</span>
+      </div>
+    </div>
+  </div>
+  <div class="speaker-note">Set expectations and pace. "Six acts. Each one is short. By the end of act 4 you'll have seen the proof. By the end of act 6, you'll know exactly what to do next."</div>
+</div>
+
+<!-- 3. FAMILY PHOTO (full-bleed) -->
 <div class="slide full-photo-slide">
   <div class="full-photo-wrap">
     <img src="assets/mike-family.png" alt="Mike Maitland and his family in Thailand" />
@@ -2167,7 +2297,21 @@
   <div class="speaker-note">"Anything you can describe, Code can build. The Dave book. This presentation. The website Claude's building behind us right now. Same tool."</div>
 </div>
 
-<!-- 12. THE DESKTOP UNLOCK -->
+<!-- 12. CODE IN ACTION — making slides (Loom) -->
+<div class="slide">
+  <div class="stagger" style="display: flex; flex-direction: column; align-items: center; max-width: 1080px; width: 100%;">
+    <p class="eyebrow">Code · Live Example</p>
+    <h2 class="title">Watch Code <em>make slides.</em></h2>
+    <p class="subtitle">This whole presentation you're sitting in? Built with Claude Code. Here's exactly how — sped up.</p>
+    <div class="video-frame">
+      <iframe src="https://www.loom.com/embed/2920a559424a4e8bb2d80cef60b33c2d" title="Using Claude Code to make slides" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+    </div>
+    <p class="small-text" style="margin-top: 22px;"><span class="caveat">~ same engine, different output — slides instead of a website ~</span></p>
+  </div>
+  <div class="speaker-note">"Don't just take my word that Code can build things. Watch it build the slides you're looking at right now. Same prompt-then-iterate loop as a website — different output."</div>
+</div>
+
+<!-- 13. THE DESKTOP UNLOCK -->
 <div class="slide">
   <div class="stagger" style="display: flex; flex-direction: column; align-items: center; max-width: 1300px;">
     <p class="eyebrow">April 14, 2026 · The Moment It Changed for Everyone</p>
@@ -2698,7 +2842,7 @@
      ============================================================ -->
 <div class="nav">
   <button class="nav-btn" id="prev-btn" aria-label="Previous slide">←</button>
-  <div class="nav-counter"><span id="cur">1</span> / <span id="total">38</span></div>
+  <div class="nav-counter"><span id="cur">1</span> / <span id="total">40</span></div>
   <button class="nav-btn" id="next-btn" aria-label="Next slide">→</button>
 </div>
 
