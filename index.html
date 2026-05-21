@@ -1024,13 +1024,29 @@
     .video-frame {
       position: relative;
       width: 100%;
-      max-width: 1020px;
+      max-width: 920px;
       aspect-ratio: 16/9;
-      border-radius: 20px;
+      border-radius: 18px;
       overflow: hidden;
       background: #1a1a1a;
-      margin-top: 28px;
+      margin-top: 18px;
       box-shadow: var(--shadow-lg);
+    }
+    /* Compact title + subtitle on video slides so the embed never clips */
+    .video-slide .title {
+      font-size: clamp(38px, 4.8vw, 64px);
+      line-height: 1.05;
+      margin-bottom: 14px;
+    }
+    .video-slide .subtitle {
+      font-size: clamp(16px, 1.7vw, 22px);
+      line-height: 1.4;
+      max-width: 820px;
+    }
+    .video-slide .eyebrow { margin-bottom: 14px; }
+    .video-slide .small-text {
+      font-size: 13px;
+      margin-top: 16px;
     }
     .video-frame iframe {
       width: 100%;
@@ -2517,8 +2533,8 @@
 </div>
 
 <!-- 4. MY STORY (YouTube embed) -->
-<div class="slide">
-  <div class="stagger" style="display: flex; flex-direction: column; align-items: center; max-width: 1080px; width: 100%;">
+<div class="slide video-slide">
+  <div class="stagger" style="display: flex; flex-direction: column; align-items: center; max-width: 1000px; width: 100%;">
     <p class="eyebrow">While Claude Builds…</p>
     <h2 class="title">Watch my <em>story.</em></h2>
     <p class="subtitle">From small-town to Two Comma Club — in five minutes.</p>
@@ -2859,8 +2875,8 @@
 </div>
 
 <!-- 12. CODE IN ACTION — making slides (Loom) -->
-<div class="slide">
-  <div class="stagger" style="display: flex; flex-direction: column; align-items: center; max-width: 1080px; width: 100%;">
+<div class="slide video-slide">
+  <div class="stagger" style="display: flex; flex-direction: column; align-items: center; max-width: 1000px; width: 100%;">
     <p class="eyebrow">Code · Live Example</p>
     <h2 class="title">Watch Code <em>make slides.</em></h2>
     <p class="subtitle">This whole presentation you're sitting in? Built with Claude Code. Here's exactly how — sped up.</p>
@@ -3098,9 +3114,9 @@
   <div class="speaker-note">Pause here. Let it sink in. "That story you just read — was an 8-year-old plus AI, in one night. Now imagine what your business looks like when AI does the same thing for your sales, your follow-ups, your content."</div>
 </div>
 
-<!-- 33. COWORK FOLLOW-UP DMs (Loom) -->
-<div class="slide">
-  <div class="stagger" style="display: flex; flex-direction: column; align-items: center; max-width: 1080px; width: 100%;">
+<!-- 40. COWORK FOLLOW-UP DMs (Loom) -->
+<div class="slide video-slide">
+  <div class="stagger" style="display: flex; flex-direction: column; align-items: center; max-width: 1000px; width: 100%;">
     <p class="eyebrow">Case Study · Cowork In Action</p>
     <h2 class="title">Cowork did the <em>follow-up.</em></h2>
     <p class="subtitle">Every person who showed interest in this workshop on Facebook — got a personal DM back. Without me. Watch.</p>
