@@ -1,0 +1,2805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Automation Secrets — Michael Maitland</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;0,6..72,800;1,6..72,400;1,6..72,500;1,6..72,600;1,6..72,700&family=Inter:wght@400;500;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --teal: #0F7B7B;
+      --teal-dark: #0A5A5A;
+      --teal-deep: #134E4A;
+      --teal-soft: rgba(15, 123, 123, 0.08);
+      --gold: #C99A3B;
+      --gold-warm: #B8860B;
+      --plum: #7C2D6A;
+      --plum-soft: rgba(124, 45, 106, 0.08);
+      --coral: #DC2626;
+      --green: #10B981;
+      --red: #ef4444;
+      --orange: #f59e0b;
+      --blue: #3b82f6;
+      --text: #1A1A1A;
+      --text-light: #4B4B4B;
+      --text-muted: #6B6B6B;
+      --bg: #FAF7F2;
+      --bg-warm: #F5F1E8;
+      --card-bg: #FFFFFF;
+      --card-soft: #F4EFE6;
+      --border: #E8E2D6;
+      --shadow-sm: 0 2px 8px rgba(20, 20, 20, 0.04);
+      --shadow-md: 0 8px 28px rgba(20, 20, 20, 0.08);
+      --shadow-lg: 0 24px 60px rgba(20, 20, 20, 0.12);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    body.blackout { background: #000; }
+    body.blackout .slide, body.blackout .nav, body.blackout .help-toast { visibility: hidden; }
+
+    /* Subtle paper grain */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        radial-gradient(circle at 15% 18%, rgba(15, 123, 123, 0.04) 0%, transparent 35%),
+        radial-gradient(circle at 85% 80%, rgba(201, 154, 59, 0.04) 0%, transparent 35%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ===== SLIDE SYSTEM ===== */
+    .slide {
+      display: none;
+      position: absolute;
+      inset: 0;
+      padding: 52px 64px 92px;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      overflow: hidden;
+      z-index: 1;
+    }
+    .slide.active {
+      display: flex;
+      animation: slideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .slide.left { text-align: left; align-items: flex-start; }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(14px) scale(0.995); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* Stagger reveal for active slide children */
+    .slide.active .stagger > * {
+      opacity: 0;
+      animation: staggerIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .slide.active .stagger > *:nth-child(1) { animation-delay: 0.08s; }
+    .slide.active .stagger > *:nth-child(2) { animation-delay: 0.16s; }
+    .slide.active .stagger > *:nth-child(3) { animation-delay: 0.24s; }
+    .slide.active .stagger > *:nth-child(4) { animation-delay: 0.32s; }
+    .slide.active .stagger > *:nth-child(5) { animation-delay: 0.40s; }
+    .slide.active .stagger > *:nth-child(6) { animation-delay: 0.48s; }
+    .slide.active .stagger > *:nth-child(7) { animation-delay: 0.56s; }
+    .slide.active .stagger > *:nth-child(8) { animation-delay: 0.64s; }
+    .slide.active .stagger > *:nth-child(9) { animation-delay: 0.72s; }
+    @keyframes staggerIn {
+      from { opacity: 0; transform: translateY(18px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ===== NAVIGATION ===== */
+    .nav {
+      position: fixed;
+      bottom: 20px;
+      left: 0; right: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+      z-index: 100;
+    }
+    .nav-btn {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border);
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: var(--text);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .nav-btn:hover {
+      border-color: var(--teal);
+      color: var(--teal);
+      transform: scale(1.08);
+      box-shadow: var(--shadow-md);
+    }
+    .nav-counter {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      min-width: 68px;
+      text-align: center;
+      letter-spacing: 0.5px;
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(6px);
+      border-radius: 100px;
+      padding: 6px 14px;
+      border: 1px solid var(--border);
+    }
+
+    /* ===== TYPOGRAPHY ===== */
+    .eyebrow {
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(12px, 1.1vw, 15px);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: var(--teal);
+      margin-bottom: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 28px;
+      height: 1.5px;
+      background: var(--teal);
+    }
+    .title {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: clamp(52px, 7vw, 104px);
+      font-weight: 700;
+      line-height: 1.04;
+      letter-spacing: -0.022em;
+      margin-bottom: 22px;
+      color: var(--text);
+    }
+    .title em {
+      font-style: italic;
+      background: linear-gradient(120deg, var(--teal) 0%, var(--plum) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 600;
+    }
+    .subtitle {
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(20px, 2.4vw, 32px);
+      font-weight: 400;
+      color: var(--text-light);
+      line-height: 1.45;
+      max-width: 900px;
+    }
+    .big-text {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: clamp(40px, 5.6vw, 80px);
+      font-weight: 700;
+      line-height: 1.08;
+      letter-spacing: -0.018em;
+    }
+    .big-text em {
+      font-style: italic;
+      background: linear-gradient(120deg, var(--teal) 0%, var(--plum) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .medium-text {
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(22px, 2.6vw, 36px);
+      font-weight: 400;
+      line-height: 1.45;
+      color: var(--text-light);
+      max-width: 980px;
+    }
+    .small-text {
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(15px, 1.5vw, 19px);
+      color: var(--text-muted);
+      line-height: 1.6;
+      max-width: 760px;
+    }
+    .caveat {
+      font-family: 'Caveat', cursive;
+      color: var(--teal);
+      font-weight: 700;
+    }
+    .bold { font-weight: 700; color: var(--text); }
+    .teal-text { color: var(--teal); }
+    .gold-text { color: var(--gold-warm); }
+    .plum-text { color: var(--plum); }
+
+    /* ===== HERO (slide 1) ===== */
+    .hero-slide { padding: 0; position: relative; }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      z-index: 0;
+    }
+    .hero-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(96px);
+    }
+    .hero-orb-1 {
+      width: 560px; height: 560px;
+      background: radial-gradient(circle, #0F7B7B 0%, transparent 70%);
+      top: -140px; left: -120px;
+      animation: float1 16s ease-in-out infinite;
+      opacity: 0.55;
+    }
+    .hero-orb-2 {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, #C99A3B 0%, transparent 70%);
+      bottom: -120px; right: -100px;
+      animation: float2 19s ease-in-out infinite;
+      opacity: 0.45;
+    }
+    .hero-orb-3 {
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, #7C2D6A 0%, transparent 70%);
+      top: 50%; right: 22%;
+      animation: float3 21s ease-in-out infinite;
+      opacity: 0.32;
+    }
+    @keyframes float1 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(48px,32px) scale(1.06)} }
+    @keyframes float2 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(-36px,-44px) scale(1.05)} }
+    @keyframes float3 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(24px,-32px) scale(1.07)} }
+
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(15,123,123,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(15,123,123,0.06) 1px, transparent 1px);
+      background-size: 72px 72px;
+      mask-image: radial-gradient(circle at center, #000 25%, transparent 78%);
+      -webkit-mask-image: radial-gradient(circle at center, #000 25%, transparent 78%);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 0 64px;
+      max-width: 1320px;
+    }
+    .hero-caveat {
+      font-family: 'Caveat', cursive;
+      font-weight: 700;
+      color: var(--teal);
+      font-size: clamp(28px, 3vw, 40px);
+      margin-bottom: 8px;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--border);
+      padding: 9px 18px;
+      border-radius: 100px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: 0.3px;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 28px;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .hero-badge-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--teal);
+      box-shadow: 0 0 0 4px rgba(15,123,123,0.18);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    .hero-title {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: clamp(76px, 11.5vw, 184px);
+      font-weight: 700;
+      line-height: 0.94;
+      letter-spacing: -0.038em;
+      color: var(--text);
+      margin-bottom: 28px;
+    }
+    .hero-title .word {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(40px);
+      animation: wordReveal 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .hero-title .word:nth-child(1) { animation-delay: 0.35s; }
+    .hero-title .word:nth-child(2) { animation-delay: 0.5s; }
+    .hero-title .word:nth-child(3) { animation-delay: 0.65s; }
+    @keyframes wordReveal {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .hero-title-accent {
+      display: block;
+      background: linear-gradient(120deg, var(--teal) 0%, var(--plum) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-style: italic;
+      font-weight: 600;
+      letter-spacing: -0.025em;
+    }
+    .hero-subtitle {
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(18px, 2vw, 26px);
+      font-weight: 500;
+      color: var(--text-light);
+      letter-spacing: 0.2px;
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      justify-content: center;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .hero-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--text-muted);
+      display: inline-block;
+    }
+
+    /* ===== FULL BLEED PHOTO SLIDE (Family) ===== */
+    .full-photo-slide {
+      padding: 0;
+      align-items: stretch;
+      justify-content: stretch;
+    }
+    .full-photo-wrap {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+    .full-photo-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      animation: kenBurns 14s ease-out forwards;
+    }
+    @keyframes kenBurns {
+      from { transform: scale(1.06); }
+      to { transform: scale(1); }
+    }
+    .full-photo-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(20,20,20,0) 40%, rgba(20,20,20,0.85) 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 64px;
+      color: #fff;
+    }
+    .full-photo-eyebrow {
+      font-family: 'Caveat', cursive;
+      color: #FFD27A;
+      font-size: clamp(28px, 3vw, 40px);
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .full-photo-title {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: clamp(40px, 5.6vw, 80px);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      max-width: 1000px;
+      color: #fff;
+    }
+    .full-photo-title em {
+      font-style: italic;
+      color: #FFD27A;
+    }
+    .full-photo-sub {
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(16px, 1.6vw, 20px);
+      font-weight: 500;
+      color: rgba(255,255,255,0.85);
+      margin-top: 14px;
+      max-width: 700px;
+    }
+
+    /* ===== LIVE BADGE ===== */
+    .live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--coral);
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 100px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 22px;
+      box-shadow: 0 6px 18px rgba(220, 38, 38, 0.3);
+    }
+    .live-badge.green {
+      background: var(--green);
+      box-shadow: 0 6px 18px rgba(16, 185, 129, 0.3);
+    }
+    .live-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #fff;
+      animation: pulse 1.4s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.82); }
+    }
+
+    /* ===== STATS ROW ===== */
+    .stat-row {
+      display: flex;
+      gap: 56px;
+      margin-top: 24px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .stat { text-align: center; }
+    .stat-num {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: clamp(56px, 7vw, 96px);
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--teal) 0%, var(--plum) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+      letter-spacing: -0.025em;
+    }
+    .stat-label {
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(13px, 1.2vw, 16px);
+      text-transform: uppercase;
+      letter-spacing: 2.5px;
+      color: var(--text-muted);
+      margin-top: 12px;
+      font-weight: 600;
+    }
+
+    /* ===== ABOUT MIKE SLIDE ===== */
+    .about-layout {
+      display: grid;
+      grid-template-columns: 1.05fr 1fr;
+      gap: 56px;
+      max-width: 1280px;
+      width: 100%;
+      align-items: center;
+      margin-top: 24px;
+    }
+    .about-photos {
+      position: relative;
+      aspect-ratio: 1/1;
+    }
+    .about-photo {
+      position: absolute;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+      border: 6px solid #fff;
+      background: var(--card-soft);
+    }
+    .about-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .about-photo.main {
+      top: 0; left: 4%;
+      width: 64%; height: 78%;
+      transform: rotate(-2.5deg);
+      z-index: 2;
+      animation: floatTilt1 8s ease-in-out infinite;
+    }
+    .about-photo.award {
+      bottom: 0; right: 0;
+      width: 56%; height: 58%;
+      transform: rotate(3.5deg);
+      z-index: 3;
+      animation: floatTilt2 9s ease-in-out infinite;
+    }
+    @keyframes floatTilt1 {
+      0%,100% { transform: rotate(-2.5deg) translateY(0); }
+      50% { transform: rotate(-3deg) translateY(-6px); }
+    }
+    @keyframes floatTilt2 {
+      0%,100% { transform: rotate(3.5deg) translateY(0); }
+      50% { transform: rotate(4deg) translateY(-8px); }
+    }
+    .about-photo .photo-tag {
+      position: absolute;
+      bottom: 12px;
+      left: 12px;
+      background: rgba(0,0,0,0.7);
+      color: #fff;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      backdrop-filter: blur(4px);
+    }
+
+    .about-content { text-align: left; }
+    .about-content .eyebrow { margin-bottom: 14px; }
+    .about-content h2 {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: clamp(40px, 4.6vw, 64px);
+      font-weight: 700;
+      line-height: 1.04;
+      letter-spacing: -0.02em;
+      margin-bottom: 14px;
+    }
+    .about-content h2 em {
+      font-style: italic;
+      background: linear-gradient(120deg, var(--teal) 0%, var(--plum) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 600;
+    }
+    .about-tagline {
+      font-family: 'Caveat', cursive;
+      color: var(--gold-warm);
+      font-size: clamp(22px, 2.2vw, 30px);
+      font-weight: 700;
+      margin-bottom: 20px;
+      display: inline-block;
+    }
+
+    .about-list {
+      list-style: none;
+      padding: 0;
+      margin-top: 18px;
+    }
+    .about-item {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(15px, 1.6vw, 20px);
+      line-height: 1.45;
+    }
+    .about-item:last-child { border-bottom: none; }
+    .about-icon {
+      flex-shrink: 0;
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      background: var(--teal-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+    .about-item strong { font-weight: 700; color: var(--text); }
+    .about-item .muted { color: var(--text-muted); font-size: 0.85em; display: block; margin-top: 2px; font-weight: 400; }
+
+    /* ===== TWO-CHANGE LAYOUT (slide 6) ===== */
+    .change-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      width: 100%;
+      max-width: 1180px;
+      margin-top: 36px;
+    }
+    .change-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 36px 32px;
+      text-align: left;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s;
+    }
+    .change-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-md);
+    }
+    .change-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 5px;
+      background: linear-gradient(90deg, var(--teal), var(--plum));
+    }
+    .change-num {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: 56px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--teal), var(--plum));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1;
+      margin-bottom: 14px;
+      font-style: italic;
+    }
+    .change-card h3 {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: clamp(22px, 2.4vw, 32px);
+      font-weight: 700;
+      margin-bottom: 14px;
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+    }
+    .change-card h3 em {
+      font-style: italic;
+      color: var(--teal);
+    }
+    .change-card p {
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(15px, 1.5vw, 19px);
+      color: var(--text-light);
+      line-height: 1.55;
+    }
+    .change-tag {
+      display: inline-block;
+      background: var(--teal-soft);
+      color: var(--teal);
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 6px 10px;
+      border-radius: 6px;
+      margin-top: 14px;
+    }
+
+    /* ===== REASONS GRID (slide 7) ===== */
+    .reasons-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+      max-width: 1280px;
+      width: 100%;
+      margin-top: 40px;
+    }
+    .reason-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 30px 20px 26px;
+      text-align: center;
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s, border-color 0.35s;
+      position: relative;
+      overflow: hidden;
+    }
+    .reason-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-md);
+      border-color: rgba(15,123,123,0.3);
+    }
+    .reason-icon-wrap {
+      width: 64px; height: 64px;
+      margin: 0 auto 14px;
+      border-radius: 16px;
+      background: var(--teal-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+    }
+    .reason-card h3 {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: clamp(18px, 1.9vw, 24px);
+      font-weight: 700;
+      margin-bottom: 6px;
+      line-height: 1.2;
+    }
+    .reason-card p {
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(13px, 1.2vw, 15px);
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+    .reason-card.featured {
+      background: linear-gradient(135deg, var(--teal) 0%, var(--teal-dark) 100%);
+      color: #fff;
+      border-color: var(--teal-dark);
+      box-shadow: 0 12px 30px rgba(15,123,123,0.25);
+      transform: scale(1.02);
+    }
+    .reason-card.featured:hover { transform: scale(1.02) translateY(-8px); }
+    .reason-card.featured h3 { color: #fff; }
+    .reason-card.featured p { color: rgba(255,255,255,0.88); }
+    .reason-card.featured .reason-icon-wrap {
+      background: rgba(255,255,255,0.18);
+    }
+
+    /* ===== JACK WELCH QUOTE (slide 8) ===== */
+    .quote-block {
+      max-width: 1100px;
+      margin-top: 26px;
+    }
+    .quote-mark {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: 140px;
+      background: linear-gradient(135deg, var(--teal) 0%, var(--plum) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 0.6;
+      margin-bottom: 0;
+      opacity: 0.6;
+    }
+    .quote-body {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: clamp(28px, 3.4vw, 48px);
+      font-weight: 500;
+      font-style: italic;
+      line-height: 1.25;
+      max-width: 1050px;
+      margin-bottom: 18px;
+      color: var(--text);
+      letter-spacing: -0.012em;
+    }
+    .quote-attr {
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(14px, 1.3vw, 17px);
+      color: var(--text-muted);
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .doubters-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-width: 860px;
+      width: 100%;
+      margin-top: 28px;
+    }
+    .doubter {
+      display: flex;
+      gap: 18px;
+      align-items: center;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 22px;
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(15px, 1.6vw, 20px);
+      text-align: left;
+      line-height: 1.4;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.25s ease;
+    }
+    .doubter:hover { transform: translateX(4px); }
+    .doubter-x {
+      flex-shrink: 0;
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: rgba(239,68,68,0.1);
+      color: var(--red);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 16px;
+    }
+    .doubter em { color: var(--text); font-weight: 500; font-style: italic; }
+
+    /* ===== TEFL HEAVEN (slide 9) ===== */
+    .case-frame {
+      width: 100%;
+      max-width: 1080px;
+      border-radius: 20px;
+      overflow: hidden;
+      margin-top: 28px;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border);
+      background: var(--card-bg);
+      position: relative;
+    }
+    .case-frame img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .case-frame::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      box-shadow: inset 0 0 60px rgba(0,0,0,0.06);
+      pointer-events: none;
+      border-radius: 20px;
+    }
+
+    /* ===== BUILT BY CLAUDE (slide 10 — no screenshot) ===== */
+    .built-window {
+      width: 100%;
+      max-width: 1080px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      margin-top: 28px;
+    }
+    .built-titlebar {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 18px;
+      background: var(--bg-warm);
+      border-bottom: 1px solid var(--border);
+    }
+    .built-traffic {
+      display: flex;
+      gap: 6px;
+    }
+    .built-traffic span {
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      background: #FF5F57;
+    }
+    .built-traffic span:nth-child(2) { background: #FEBC2E; }
+    .built-traffic span:nth-child(3) { background: #28C840; }
+    .built-url {
+      flex: 1;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 7px 14px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      color: var(--text-muted);
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .built-url .lock { color: var(--green); }
+    .built-body {
+      padding: 56px 48px;
+      text-align: left;
+      min-height: 320px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      background:
+        radial-gradient(circle at 80% 20%, rgba(124,45,106,0.06) 0%, transparent 50%),
+        radial-gradient(circle at 20% 80%, rgba(15,123,123,0.06) 0%, transparent 50%),
+        #fff;
+    }
+    .built-body h3 {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: clamp(28px, 3vw, 42px);
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.015em;
+      margin-bottom: 14px;
+    }
+    .built-body h3 em {
+      font-style: italic;
+      background: linear-gradient(120deg, var(--teal), var(--plum));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .built-body p {
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(16px, 1.5vw, 19px);
+      color: var(--text-light);
+      line-height: 1.55;
+      margin-bottom: 8px;
+      max-width: 700px;
+    }
+    .built-cursor {
+      display: inline-block;
+      width: 3px; height: 1.05em;
+      background: var(--teal);
+      vertical-align: text-bottom;
+      margin-left: 2px;
+      animation: blink 1s steps(2) infinite;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+    .built-meta {
+      display: flex;
+      gap: 18px;
+      margin-top: 18px;
+      flex-wrap: wrap;
+    }
+    .built-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--teal-soft);
+      color: var(--teal);
+      padding: 6px 12px;
+      border-radius: 100px;
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+    .built-chip::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--teal);
+    }
+
+    /* ===== STEPS (Connect to Phone, slide 11) ===== */
+    .step-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      max-width: 1180px;
+      width: 100%;
+      margin-top: 40px;
+    }
+    .step-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 32px 26px;
+      text-align: left;
+      position: relative;
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s;
+      box-shadow: var(--shadow-sm);
+    }
+    .step-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-md);
+    }
+    .step-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--teal), var(--teal-dark));
+      color: #fff;
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 18px;
+      box-shadow: 0 8px 20px rgba(15,123,123,0.3);
+    }
+    .step-card h3 {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: clamp(20px, 2vw, 26px);
+      font-weight: 700;
+      margin-bottom: 10px;
+      line-height: 1.2;
+    }
+    .step-card p {
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(14px, 1.4vw, 17px);
+      color: var(--text-light);
+      line-height: 1.5;
+    }
+
+    /* ===== VIDEO EMBED ===== */
+    .video-frame {
+      position: relative;
+      width: 100%;
+      max-width: 1020px;
+      aspect-ratio: 16/9;
+      border-radius: 20px;
+      overflow: hidden;
+      background: #1a1a1a;
+      margin-top: 28px;
+      box-shadow: var(--shadow-lg);
+    }
+    .video-frame iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+
+    /* ===== DAVE PIPELINE (slide 12) ===== */
+    .pipeline {
+      display: flex;
+      align-items: stretch;
+      gap: 6px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 32px;
+      max-width: 1280px;
+    }
+    .pipe-step {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px 16px;
+      min-width: 158px;
+      text-align: center;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .pipe-step:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+    }
+    .pipe-emoji { font-size: 32px; margin-bottom: 8px; line-height: 1; }
+    .pipe-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.2;
+    }
+    .pipe-sub {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    .pipe-arrow {
+      color: var(--teal);
+      font-size: 22px;
+      font-weight: 700;
+      align-self: center;
+    }
+
+    /* ===== DAVE BOOK PAGE ===== */
+    .book-slide {
+      padding: 40px 56px 92px;
+      background:
+        radial-gradient(circle at 15% 20%, rgba(15,123,123,0.06) 0%, transparent 45%),
+        radial-gradient(circle at 85% 80%, rgba(201,154,59,0.06) 0%, transparent 45%),
+        var(--bg);
+    }
+    .book-page {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      gap: 56px;
+      max-width: 1320px;
+      width: 100%;
+      align-items: center;
+    }
+    .book-page.center {
+      grid-template-columns: 1fr;
+      max-width: 900px;
+      text-align: center;
+    }
+    .book-image {
+      position: relative;
+      border-radius: 22px;
+      overflow: hidden;
+      box-shadow: 0 30px 70px rgba(20, 20, 20, 0.18);
+      border: 8px solid #fff;
+      aspect-ratio: 1/1;
+      background: var(--card-soft);
+      transform: rotate(-1.2deg);
+      transition: transform 0.5s ease;
+    }
+    .book-page:hover .book-image { transform: rotate(0deg); }
+    .book-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .book-image::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      box-shadow: inset 0 0 80px rgba(0,0,0,0.08);
+      pointer-events: none;
+    }
+    .book-page-num {
+      display: inline-block;
+      font-family: 'Caveat', cursive;
+      color: var(--gold-warm);
+      font-size: clamp(22px, 2.2vw, 30px);
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .book-text {
+      text-align: left;
+    }
+    .book-text.center { text-align: center; }
+    .book-text h2 {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: clamp(40px, 5vw, 72px);
+      font-weight: 700;
+      font-style: italic;
+      line-height: 1.05;
+      letter-spacing: -0.018em;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+    .book-text h2 em {
+      font-style: italic;
+      background: linear-gradient(120deg, var(--teal), var(--plum));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .book-text p {
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(15px, 1.5vw, 18px);
+      color: var(--text-muted);
+      line-height: 1.55;
+      max-width: 460px;
+    }
+    .book-text.center p { max-width: none; }
+    .book-cover-image {
+      width: 100%;
+      max-width: 540px;
+      aspect-ratio: 1/1;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 36px 80px rgba(20, 20, 20, 0.25);
+      border: 10px solid #fff;
+      margin: 28px auto 0;
+      transform: rotate(0deg);
+      animation: bookFloat 7s ease-in-out infinite;
+    }
+    .book-cover-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    @keyframes bookFloat {
+      0%,100% { transform: translateY(0) rotate(0); }
+      50% { transform: translateY(-10px) rotate(-1deg); }
+    }
+
+    /* ===== SPEAKER NOTES ===== */
+    .speaker-note {
+      position: fixed;
+      bottom: 78px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #fffbe6;
+      border: 1px solid #f0d860;
+      border-radius: 12px;
+      padding: 12px 22px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      color: #6b5500;
+      max-width: 760px;
+      text-align: center;
+      display: none;
+      z-index: 99;
+      line-height: 1.45;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    }
+    body.show-notes .speaker-note { display: block; }
+
+    /* ===== HELP TOAST ===== */
+    .help-toast {
+      position: fixed;
+      top: 18px;
+      right: 18px;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 16px;
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      color: var(--text-muted);
+      box-shadow: var(--shadow-sm);
+      z-index: 100;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      transition: opacity 0.5s, transform 0.5s;
+    }
+    .help-toast kbd {
+      background: var(--card-soft);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-size: 11px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    /* ===== PROGRESS BAR ===== */
+    .progress {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: rgba(15, 123, 123, 0.08);
+      z-index: 100;
+    }
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--teal), var(--plum));
+      transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      width: 0%;
+    }
+
+    /* ===== AI BREADTH — PILLARS GRID ===== */
+    .pillars-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+      max-width: 1240px;
+      width: 100%;
+      margin-top: 32px;
+    }
+    .pillar-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 32px 28px;
+      text-align: left;
+      box-shadow: var(--shadow-sm);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.35s cubic-bezier(0.16,1,0.3,1), box-shadow 0.35s;
+    }
+    .pillar-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-md);
+    }
+    .pillar-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 6px;
+      background: linear-gradient(90deg, var(--teal), var(--plum));
+    }
+    .pillar-icon {
+      width: 64px; height: 64px;
+      border-radius: 16px;
+      background: var(--teal-soft);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 30px;
+      margin-bottom: 18px;
+    }
+    .pillar-tag {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 6px;
+    }
+    .pillar-name {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: clamp(28px, 3vw, 40px);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+    .pillar-name em {
+      font-style: italic;
+      background: linear-gradient(120deg, var(--teal), var(--plum));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .pillar-tagline {
+      font-family: 'Newsreader', Georgia, serif;
+      font-style: italic;
+      font-size: clamp(18px, 1.6vw, 22px);
+      color: var(--gold-warm);
+      margin-bottom: 14px;
+      font-weight: 500;
+    }
+    .pillar-desc {
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(14px, 1.4vw, 17px);
+      color: var(--text-light);
+      line-height: 1.55;
+    }
+    .pillar-card.featured {
+      background: linear-gradient(135deg, var(--teal-deep) 0%, #0a4a4a 100%);
+      color: #fff;
+      border-color: var(--teal-deep);
+      box-shadow: 0 16px 40px rgba(15,123,123,0.25);
+    }
+    .pillar-card.featured::before { background: linear-gradient(90deg, #FFD27A, var(--gold)); }
+    .pillar-card.featured .pillar-name { color: #fff; }
+    .pillar-card.featured .pillar-name em {
+      background: linear-gradient(120deg, #FFD27A, var(--gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .pillar-card.featured .pillar-tag { color: #FFD27A; }
+    .pillar-card.featured .pillar-desc { color: rgba(255,255,255,0.85); }
+    .pillar-card.featured .pillar-tagline { color: #FFD27A; }
+    .pillar-card.featured .pillar-icon { background: rgba(255,255,255,0.16); }
+
+    /* ===== CAPABILITY LIST ===== */
+    .cap-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px 24px;
+      max-width: 960px;
+      width: 100%;
+      margin-top: 28px;
+    }
+    .cap-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 18px;
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(15px, 1.5vw, 19px);
+      text-align: left;
+      line-height: 1.4;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.25s ease;
+    }
+    .cap-item:hover { transform: translateX(4px); }
+    .cap-check {
+      flex-shrink: 0;
+      width: 28px; height: 28px;
+      border-radius: 8px;
+      background: var(--teal-soft);
+      color: var(--teal);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+    }
+    .cap-item strong { color: var(--text); font-weight: 600; }
+
+    /* ===== TERMINAL VS DESKTOP COMPARE ===== */
+    .compare-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      max-width: 1240px;
+      width: 100%;
+      margin-top: 32px;
+      align-items: stretch;
+    }
+    .compare-panel {
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    .compare-label {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(6px);
+      color: var(--text);
+      padding: 5px 12px;
+      border-radius: 100px;
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      z-index: 5;
+    }
+    .compare-label.before { color: #ef4444; }
+    .compare-label.after { color: var(--green); }
+    .terminal {
+      background: #0d0d0d;
+      color: #b3ffd1;
+      font-family: 'SF Mono', Menlo, Consolas, monospace;
+      font-size: 13px;
+      line-height: 1.55;
+      padding: 22px 24px;
+      min-height: 280px;
+      text-align: left;
+    }
+    .terminal-bar {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+    .terminal-bar span {
+      width: 11px; height: 11px;
+      border-radius: 50%;
+      background: #FF5F57;
+    }
+    .terminal-bar span:nth-child(2) { background: #FEBC2E; }
+    .terminal-bar span:nth-child(3) { background: #28C840; }
+    .terminal .prompt { color: #7c7; }
+    .terminal .cmd { color: #fff; }
+    .terminal .out { color: #b3b3b3; }
+    .terminal .blink {
+      display: inline-block;
+      width: 8px; height: 16px;
+      background: #b3ffd1;
+      vertical-align: text-bottom;
+      animation: blink 1s steps(2) infinite;
+    }
+    .desktop {
+      background: linear-gradient(135deg, #FAF7F2 0%, #F5F1E8 100%);
+      padding: 0;
+      min-height: 280px;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+    }
+    .desktop-bar {
+      background: rgba(20,20,20,0.04);
+      padding: 10px 16px;
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+    }
+    .desktop-bar .dots span {
+      width: 11px; height: 11px;
+      border-radius: 50%;
+      display: inline-block;
+      background: #FF5F57;
+      margin-right: 4px;
+    }
+    .desktop-bar .dots span:nth-child(2) { background: #FEBC2E; }
+    .desktop-bar .dots span:nth-child(3) { background: #28C840; }
+    .desktop-body {
+      display: grid;
+      grid-template-columns: 100px 1fr;
+      flex: 1;
+    }
+    .desktop-side {
+      background: rgba(20,20,20,0.03);
+      padding: 14px 10px;
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .desktop-side .pill {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      color: var(--text-light);
+      font-weight: 500;
+    }
+    .desktop-side .pill.active {
+      background: var(--teal);
+      color: #fff;
+      border-color: var(--teal);
+    }
+    .desktop-main {
+      padding: 18px 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .desktop-main h4 {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+    .desktop-main .row {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      color: var(--text-light);
+    }
+    .desktop-main .row.green { border-left: 3px solid var(--green); }
+    .desktop-main .row.teal { border-left: 3px solid var(--teal); }
+    .compare-caption {
+      padding: 14px 20px 18px;
+      background: var(--card-bg);
+      border-top: 1px solid var(--border);
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(13px, 1.3vw, 15px);
+      color: var(--text-light);
+      text-align: left;
+      line-height: 1.5;
+    }
+    .compare-caption strong { color: var(--text); font-weight: 700; }
+
+    /* ===== SPECTRE MASTERMIND ===== */
+    .spectre-slide {
+      background:
+        radial-gradient(circle at 20% 30%, rgba(124,45,106,0.12) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(15,123,123,0.10) 0%, transparent 50%),
+        var(--bg);
+    }
+    .spectre-logo {
+      width: 200px; height: 200px;
+      margin: 0 auto 24px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--teal-deep) 0%, var(--plum) 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 24px 60px rgba(124,45,106,0.3);
+      position: relative;
+      overflow: hidden;
+      animation: spectreFloat 6s ease-in-out infinite;
+    }
+    @keyframes spectreFloat {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+    .spectre-logo::before {
+      content: '';
+      position: absolute;
+      inset: 8px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.2);
+    }
+    .spectre-logo-mark {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: 68px;
+      font-weight: 800;
+      color: #fff;
+      font-style: italic;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      z-index: 2;
+    }
+    .spectre-logo-mark::after {
+      content: '⌖';
+      display: block;
+      font-size: 22px;
+      font-style: normal;
+      color: #FFD27A;
+      margin-top: 4px;
+      letter-spacing: 0;
+    }
+    .spectre-tag {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: #FFD27A;
+      margin-top: 2px;
+      z-index: 2;
+    }
+    .spectre-placeholder-note {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      color: var(--text-muted);
+      font-style: italic;
+      margin-top: 4px;
+      text-align: center;
+      letter-spacing: 0.5px;
+    }
+
+    /* ===== OFFERS GRID ===== */
+    .offers-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+      max-width: 1260px;
+      width: 100%;
+      margin-top: 32px;
+    }
+    .offer-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 32px 26px;
+      text-align: left;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.35s cubic-bezier(0.16,1,0.3,1), box-shadow 0.35s, border-color 0.35s;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+    }
+    .offer-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-lg);
+      border-color: rgba(15,123,123,0.4);
+    }
+    .offer-card.featured {
+      background: linear-gradient(135deg, var(--teal-deep) 0%, var(--plum) 100%);
+      color: #fff;
+      border-color: var(--plum);
+      box-shadow: 0 16px 44px rgba(124,45,106,0.3);
+      transform: scale(1.03);
+    }
+    .offer-card.featured:hover { transform: scale(1.03) translateY(-8px); }
+    .offer-tier {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 8px;
+    }
+    .offer-card.featured .offer-tier { color: #FFD27A; }
+    .offer-title {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: clamp(22px, 2.4vw, 32px);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.018em;
+      margin-bottom: 6px;
+    }
+    .offer-card.featured .offer-title { color: #fff; }
+    .offer-when {
+      font-family: 'Caveat', cursive;
+      color: var(--gold-warm);
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 14px;
+      display: inline-block;
+    }
+    .offer-card.featured .offer-when { color: #FFD27A; }
+    .offer-price {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: clamp(36px, 4vw, 52px);
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, var(--teal), var(--plum));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 4px;
+    }
+    .offer-card.featured .offer-price {
+      background: linear-gradient(135deg, #FFD27A, #fff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .offer-price-sub {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 500;
+      margin-bottom: 18px;
+    }
+    .offer-card.featured .offer-price-sub { color: rgba(255,255,255,0.7); }
+    .offer-list {
+      list-style: none;
+      padding: 0;
+      margin-top: auto;
+    }
+    .offer-list li {
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(13px, 1.3vw, 16px);
+      color: var(--text-light);
+      line-height: 1.45;
+      padding: 8px 0;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .offer-list li:first-child { border-top: none; padding-top: 0; }
+    .offer-card.featured .offer-list li { color: rgba(255,255,255,0.85); border-top-color: rgba(255,255,255,0.15); }
+    .offer-list li::before {
+      content: '✓';
+      color: var(--teal);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .offer-card.featured .offer-list li::before { color: #FFD27A; }
+
+    /* ===== OFFER DETAIL LAYOUT ===== */
+    .offer-detail {
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      gap: 48px;
+      max-width: 1240px;
+      width: 100%;
+      margin-top: 24px;
+      align-items: center;
+    }
+    .offer-detail-price {
+      background: linear-gradient(135deg, var(--teal-deep) 0%, var(--plum) 100%);
+      border-radius: 24px;
+      padding: 44px 36px;
+      color: #fff;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+      overflow: hidden;
+    }
+    .offer-detail-price::before {
+      content: '';
+      position: absolute;
+      width: 220px; height: 220px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+      top: -80px; right: -80px;
+    }
+    .offer-detail-tier {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: #FFD27A;
+      margin-bottom: 14px;
+    }
+    .offer-detail-title {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: clamp(32px, 3.6vw, 48px);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.022em;
+      margin-bottom: 22px;
+      color: #fff;
+    }
+    .offer-detail-title em {
+      font-style: italic;
+      color: #FFD27A;
+    }
+    .offer-detail-amount {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: clamp(48px, 6.4vw, 84px);
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+    .offer-detail-amount-sub {
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      color: rgba(255,255,255,0.85);
+      font-weight: 500;
+      margin-bottom: 28px;
+    }
+    .offer-detail-when {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.16);
+      backdrop-filter: blur(6px);
+      padding: 8px 14px;
+      border-radius: 100px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: #FFD27A;
+      letter-spacing: 0.3px;
+    }
+    .offer-detail-when .dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: #FFD27A;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+    .offer-detail-content {
+      text-align: left;
+    }
+    .offer-detail-content h3 {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: clamp(24px, 2.4vw, 30px);
+      font-weight: 700;
+      margin-bottom: 8px;
+      letter-spacing: -0.012em;
+    }
+    .offer-detail-content p {
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(15px, 1.5vw, 19px);
+      color: var(--text-light);
+      line-height: 1.55;
+      margin-bottom: 16px;
+    }
+    .offer-detail-content ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 8px;
+    }
+    .offer-detail-content ul li {
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(14px, 1.4vw, 17px);
+      color: var(--text-light);
+      line-height: 1.5;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .offer-detail-content ul li:last-child { border-bottom: none; }
+    .offer-detail-content ul li::before {
+      content: '→';
+      color: var(--teal);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .offer-stat {
+      background: var(--teal-soft);
+      border-radius: 14px;
+      padding: 16px 20px;
+      margin-top: 18px;
+      display: flex;
+      gap: 14px;
+      align-items: center;
+    }
+    .offer-stat-num {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: 40px;
+      font-weight: 800;
+      color: var(--teal);
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+    .offer-stat-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      color: var(--text-light);
+      line-height: 1.4;
+    }
+    .offer-stat-label strong { color: var(--text); }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 980px) {
+      .reasons-grid { grid-template-columns: repeat(2, 1fr); }
+      .pillars-grid, .offers-grid { grid-template-columns: 1fr; }
+      .change-row, .step-grid, .about-layout, .book-page, .compare-row, .offer-detail, .cap-list { grid-template-columns: 1fr; }
+      .slide { padding: 40px 24px 88px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="progress"><div class="progress-bar" id="progress-bar"></div></div>
+
+<!-- ============================================================
+     AI AUTOMATION SECRETS — Michael Maitland
+     Que Pasa Restaurant, Pak Red
+     ============================================================ -->
+
+<!-- 1. HERO / TITLE -->
+<div class="slide active hero-slide" id="s1">
+  <div class="hero-bg">
+    <div class="hero-orb hero-orb-1"></div>
+    <div class="hero-orb hero-orb-2"></div>
+    <div class="hero-orb hero-orb-3"></div>
+    <div class="hero-grid"></div>
+  </div>
+  <div class="hero-content">
+    <p class="hero-caveat">live workshop ~</p>
+    <div class="hero-badge">
+      <span class="hero-badge-dot"></span>
+      Que Pasa Restaurant &middot; Pak Red, Thailand
+    </div>
+    <h1 class="hero-title">
+      <span class="word">AI</span>
+      <span class="word">Automation</span>
+      <span class="hero-title-accent"><span class="word">Secrets.</span></span>
+    </h1>
+    <p class="hero-subtitle">
+      <span>Michael Maitland</span>
+      <span class="hero-dot"></span>
+      <span>Live demos · Real systems · Built in front of you</span>
+    </p>
+  </div>
+  <div class="speaker-note">Welcome the room. Set the energy: "By the time we leave tonight, you'll have seen things that change how you think about your business."</div>
+</div>
+
+<!-- 2. FAMILY PHOTO (full-bleed) -->
+<div class="slide full-photo-slide">
+  <div class="full-photo-wrap">
+    <img src="assets/mike-family.png" alt="Mike Maitland and his family in Thailand" />
+    <div class="full-photo-overlay">
+      <p class="full-photo-eyebrow">a family of seven ~</p>
+      <h2 class="full-photo-title">Bangkok is home. <em>For 13 years now.</em></h2>
+      <p class="full-photo-sub">My wife, our five kids, and the family business we've built — half a world from where we started.</p>
+    </div>
+  </div>
+  <div class="speaker-note">"I live in Thailand with my wife and five kids. One's just started university in the UK — so we're spread across continents now."</div>
+</div>
+
+<!-- 3. LIVE CLAUDE CODE DEMO -->
+<div class="slide">
+  <div class="stagger" style="display: flex; flex-direction: column; align-items: center; max-width: 1280px;">
+    <div class="live-badge"><span class="live-dot"></span> Live · Right Now</div>
+    <h2 class="title">Watch Claude Code <em>build a website.</em></h2>
+    <p class="subtitle">No template. No drag-and-drop. Just a prompt — and a real, working site in minutes.</p>
+    <div class="stat-row">
+      <div class="stat"><div class="stat-num" data-target="1">0</div><div class="stat-label">Prompt</div></div>
+      <div class="stat"><div class="stat-num" data-target="0">0</div><div class="stat-label">Hand-Written Code</div></div>
+      <div class="stat"><div class="stat-num">∞</div><div class="stat-label">What's Possible</div></div>
+    </div>
+  </div>
+  <div class="speaker-note">Kick this off live before continuing. Let the room SEE it happen. Then say: "While that works, let me tell you who I am."</div>
+</div>
+
+<!-- 4. MY STORY (YouTube embed) -->
+<div class="slide">
+  <div class="stagger" style="display: flex; flex-direction: column; align-items: center; max-width: 1080px; width: 100%;">
+    <p class="eyebrow">While Claude Builds…</p>
+    <h2 class="title">Watch my <em>story.</em></h2>
+    <p class="subtitle">From small-town to Two Comma Club — in five minutes.</p>
+    <div class="video-frame">
+      <iframe src="https://www.youtube.com/embed/Ar_H_pbZUIM?rel=0&modestbranding=1" title="Michael Maitland — My Story" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+  </div>
+  <div class="speaker-note">Play the video here while Claude Code keeps building in another tab. The story does the talking for you — sit back.</div>
+</div>
+
+<!-- 5. ABOUT MIKE — photos + storytelling marketing -->
+<div class="slide">
+  <div class="about-layout">
+    <div class="about-photos">
+      <div class="about-photo main">
+        <img src="assets/mike-portrait.jpg" alt="Michael Maitland" />
+        <div class="photo-tag">Bangkok, Thailand</div>
+      </div>
+      <div class="about-photo award">
+        <img src="assets/2cc-award.jpg" alt="Two Comma Club Award" />
+        <div class="photo-tag">Two Comma Club</div>
+      </div>
+    </div>
+    <div class="about-content stagger">
+      <p class="eyebrow">Who's Running This Workshop</p>
+      <h2>Michael <em>Maitland.</em></h2>
+      <p class="about-tagline">…I look good. I smell great. ✌</p>
+      <ul class="about-list">
+        <li class="about-item">
+          <div class="about-icon">📖</div>
+          <div><strong>Storytelling marketing — my main expertise.</strong><span class="muted">I turn ordinary businesses into the ones people remember and recommend.</span></div>
+        </li>
+        <li class="about-item">
+          <div class="about-icon">🇹🇭</div>
+          <div><strong>13 years in Thailand.</strong><span class="muted">Long enough to be a local. Foreign enough to still notice things.</span></div>
+        </li>
+        <li class="about-item">
+          <div class="about-icon">🤖</div>
+          <div><strong>Marketing &amp; AI agency / consultancy.</strong><span class="muted">Installing AI systems that actually generate revenue.</span></div>
+        </li>
+        <li class="about-item">
+          <div class="about-icon">🌏</div>
+          <div><strong>Teach English Abroad programs.</strong><span class="muted">Sending hundreds of teachers from the West to classrooms across Asia.</span></div>
+        </li>
+        <li class="about-item">
+          <div class="about-icon">🏆</div>
+          <div><strong>Two Comma Club Award winner.</strong><span class="muted">Over <span class="bold teal-text">$5,000,000</span> generated across these businesses.</span></div>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="speaker-note">Land the storytelling expertise first — that's the through-line for tonight. Don't rush the smell-great joke. Pause. Let them laugh. Move on.</div>
+</div>
+
+<!-- 6. THE WORLD HAS CHANGED -->
+<div class="slide">
+  <p class="eyebrow">In The Last 60 Days</p>
+  <h2 class="big-text">The world has just <em>changed.</em></h2>
+  <p class="medium-text" style="margin-top: 16px;">Two things that weren't true two months ago — are true today. <span class="caveat">and most people haven't noticed yet ~</span></p>
+  <div class="change-row stagger">
+    <div class="change-card">
+      <div class="change-num">01</div>
+      <h3>AI is now <em>actually</em> smart — and it stopped making mistakes.</h3>
+      <p>The latest models reason, double-check themselves, and ship work that holds up. We crossed a line from "interesting demo" to "trusted teammate."</p>
+      <span class="change-tag">Capability Jump</span>
+    </div>
+    <div class="change-card">
+      <div class="change-num">02</div>
+      <h3>Autonomous AI agents are <em>here</em> — and they can use a browser.</h3>
+      <p>Tools like <span class="bold teal-text">Open Claw</span> and Claude with computer-use can now open Facebook, follow up on leads, and finish tasks — without you.</p>
+      <span class="change-tag">Autonomy Unlocked</span>
+    </div>
+  </div>
+  <div class="speaker-note">Hammer this: "Two months. That's the difference between what was a science demo, and what is now a real employee. Most of your competitors are going to feel this six months from now."</div>
+</div>
+
+<!-- 7. 5 REASONS FOR AI -->
+<div class="slide">
+  <p class="eyebrow">Why You Need This — Now</p>
+  <h2 class="title">5 reasons to <em>adopt AI today.</em></h2>
+  <p class="subtitle" style="margin-top: -4px;">Each one alone is enough. Together they change the math of running a business.</p>
+  <div class="reasons-grid stagger">
+    <div class="reason-card">
+      <div class="reason-icon-wrap">⏱️</div>
+      <h3>Save Time</h3>
+      <p>Hours of work, done in minutes.</p>
+    </div>
+    <div class="reason-card">
+      <div class="reason-icon-wrap">💰</div>
+      <h3>Save Money</h3>
+      <p>Replace whole line items in your P&amp;L.</p>
+    </div>
+    <div class="reason-card">
+      <div class="reason-icon-wrap">✨</div>
+      <h3>Higher Quality</h3>
+      <p>Better copy, cleaner code, sharper design.</p>
+    </div>
+    <div class="reason-card">
+      <div class="reason-icon-wrap">🎯</div>
+      <h3>Get Leads</h3>
+      <p>Find, qualify, follow up — automatically.</p>
+    </div>
+    <div class="reason-card featured">
+      <div class="reason-icon-wrap">🚀</div>
+      <h3>+1,000% Output</h3>
+      <p>One person doing the work of ten.</p>
+    </div>
+  </div>
+  <div class="speaker-note">Land each one with a one-sentence story from your own business. Don't list — sell.</div>
+</div>
+
+<!-- ===== AI BREADTH (slides 8–12) — Chat / Cowork / Code + Desktop Unlock ===== -->
+
+<!-- 8. THE MISCONCEPTION -->
+<div class="slide">
+  <div class="stagger" style="display: flex; flex-direction: column; align-items: center; max-width: 1240px;">
+    <p class="eyebrow">The Misconception</p>
+    <h2 class="big-text">Most people think AI is just <em>a chat box.</em></h2>
+    <p class="medium-text" style="margin-top: 18px;">Open a tab. Type a question. Read the answer. <span class="caveat">~ that's the whole AI, right? ~</span></p>
+    <div class="built-window" style="max-width: 820px; margin-top: 28px;">
+      <div class="built-titlebar">
+        <div class="built-traffic"><span></span><span></span><span></span></div>
+        <div class="built-url">💬 chat.openai.com</div>
+      </div>
+      <div class="built-body" style="padding: 28px 32px; min-height: 0;">
+        <p style="font-family: 'Inter', sans-serif; font-size: 16px; color: var(--text-light); margin-bottom: 14px;"><strong style="color: var(--text);">You:</strong> &nbsp;Write me a marketing email about my coffee shop.</p>
+        <p style="font-family: 'Inter', sans-serif; font-size: 16px; color: var(--text-light);"><strong style="color: var(--teal);">AI:</strong> &nbsp;Sure! Here's a marketing email for your coffee shop…</p>
+      </div>
+    </div>
+    <p class="small-text" style="margin-top: 26px; font-size: clamp(18px, 1.8vw, 24px); color: var(--text); font-family: 'Newsreader', Georgia, serif; font-style: italic; font-weight: 500;">But AI is <span class="bold teal-text">much, much bigger</span> than that.</p>
+  </div>
+  <div class="speaker-note">"This is what 95% of people think AI is. A chat box. And it's incredible — but it's only one door into a much bigger building."</div>
+</div>
+
+<!-- 9. THE 3 PILLARS -->
+<div class="slide">
+  <p class="eyebrow">The way I see it</p>
+  <h2 class="title">Three doors. <em>One technology.</em></h2>
+  <p class="subtitle">Each one solves a different problem. Pick the door that matches yours.</p>
+  <div class="pillars-grid stagger">
+    <div class="pillar-card">
+      <div class="pillar-icon">💬</div>
+      <p class="pillar-tag">Pillar 01</p>
+      <h3 class="pillar-name"><em>Chat.</em></h3>
+      <p class="pillar-tagline">Information.</p>
+      <p class="pillar-desc">Ask, learn, brainstorm, write. The familiar chatbot — answers on demand. Powerful, but always waiting for your next prompt.</p>
+    </div>
+    <div class="pillar-card featured">
+      <div class="pillar-icon">🤖</div>
+      <p class="pillar-tag">Pillar 02</p>
+      <h3 class="pillar-name"><em>Cowork.</em></h3>
+      <p class="pillar-tagline">An agentic assistant.</p>
+      <p class="pillar-desc">Doesn't just answer — it <em>acts</em>. It uses your computer, opens apps, clicks buttons, sends DMs, fills sheets. A coworker, not a chatbot.</p>
+    </div>
+    <div class="pillar-card">
+      <div class="pillar-icon">🛠️</div>
+      <p class="pillar-tag">Pillar 03</p>
+      <h3 class="pillar-name"><em>Code.</em></h3>
+      <p class="pillar-tagline">A builder.</p>
+      <p class="pillar-desc">For making things. Websites, apps, documents, automations, entire books. Whatever you can describe, it can build.</p>
+    </div>
+  </div>
+  <div class="speaker-note">"Chat is information. Cowork is the agent that does things for you. Code is the builder. Three doors. Same technology underneath."</div>
+</div>
+
+<!-- 10. COWORK DEEP DIVE -->
+<div class="slide">
+  <div class="stagger" style="display: flex; flex-direction: column; align-items: center; max-width: 1240px;">
+    <p class="eyebrow">Pillar 02 · Cowork</p>
+    <h2 class="title">Cowork uses <em>your computer</em> for you.</h2>
+    <p class="subtitle">Anthropic launched it in January. It runs on your desktop — opens apps, clicks, types, sends messages — like a human coworker would.</p>
+    <div class="cap-list">
+      <div class="cap-item"><span class="cap-check">✓</span><span><strong>Computer Use.</strong> Sees your screen. Moves the mouse. Types on the keyboard.</span></div>
+      <div class="cap-item"><span class="cap-check">✓</span><span><strong>Opens any app.</strong> Browsers, spreadsheets, Slack, Facebook, Notion, your CRM.</span></div>
+      <div class="cap-item"><span class="cap-check">✓</span><span><strong>Connects to APIs.</strong> Pulls data, fires off requests, stitches services together.</span></div>
+      <div class="cap-item"><span class="cap-check">✓</span><span><strong>Multi-step workflows.</strong> Follows up on every lead. Sorts your inbox. Writes your invoices.</span></div>
+      <div class="cap-item"><span class="cap-check">✓</span><span><strong>Runs while you sleep.</strong> Hand it a task, walk away, come back to it done.</span></div>
+      <div class="cap-item"><span class="cap-check">✓</span><span><strong>No code required.</strong> You speak. It does. That's the whole interface.</span></div>
+    </div>
+    <p class="small-text" style="margin-top: 24px;"><span class="caveat">~ you'll see Cowork do exactly this with Facebook DMs in a few minutes ~</span></p>
+  </div>
+  <div class="speaker-note">"This is the part most people haven't seen yet. Computer Use is real. It runs Facebook for you, fills your sheets, sends your follow-ups. It's the closest thing we have to a real employee that costs $20 a month."</div>
+</div>
+
+<!-- 11. CODE DEEP DIVE -->
+<div class="slide">
+  <div class="stagger" style="display: flex; flex-direction: column; align-items: center; max-width: 1240px;">
+    <p class="eyebrow">Pillar 03 · Code</p>
+    <h2 class="title">Code <em>builds things</em> for you.</h2>
+    <p class="subtitle">Not for developers — for anyone who has ever paid an agency to make something.</p>
+    <div class="cap-list">
+      <div class="cap-item"><span class="cap-check">✓</span><span><strong>Whole websites.</strong> The kind you used to pay an agency $20k for.</span></div>
+      <div class="cap-item"><span class="cap-check">✓</span><span><strong>Mobile &amp; web apps.</strong> Internal tools, customer portals, booking systems.</span></div>
+      <div class="cap-item"><span class="cap-check">✓</span><span><strong>Documents &amp; reports.</strong> Sales decks, contracts, proposals — formatted, branded.</span></div>
+      <div class="cap-item"><span class="cap-check">✓</span><span><strong>Automations.</strong> Scripts that run nightly, fetch your data, email the result.</span></div>
+      <div class="cap-item"><span class="cap-check">✓</span><span><strong>Books, games, stories.</strong> The whole Dave the Dinosaur book — built with Code &amp; Cowork.</span></div>
+      <div class="cap-item"><span class="cap-check">✓</span><span><strong>Iterates by prompt.</strong> "Make it more blue. Add a button. Try again." Done.</span></div>
+    </div>
+    <p class="small-text" style="margin-top: 24px;"><span class="caveat">~ this presentation was built by Code in one afternoon ~</span></p>
+  </div>
+  <div class="speaker-note">"Anything you can describe, Code can build. The Dave book. This presentation. The website Claude's building behind us right now. Same tool."</div>
+</div>
+
+<!-- 12. THE DESKTOP UNLOCK -->
+<div class="slide">
+  <div class="stagger" style="display: flex; flex-direction: column; align-items: center; max-width: 1300px;">
+    <p class="eyebrow">April 14, 2026 · The Moment It Changed for Everyone</p>
+    <h2 class="big-text">From terminal <em>→ to desktop.</em></h2>
+    <p class="medium-text" style="margin-top: 14px;">Claude Code used to live in a command line. It was a developer-only tool. <span class="caveat">until last month ~</span></p>
+    <div class="compare-row">
+      <div class="compare-panel">
+        <span class="compare-label before">Before · Terminal Only</span>
+        <div class="terminal">
+          <div class="terminal-bar"><span></span><span></span><span></span></div>
+          <div><span class="prompt">~ $</span> <span class="cmd">npm install -g @anthropic-ai/claude-code</span></div>
+          <div class="out">added 247 packages in 3.2s</div>
+          <div><span class="prompt">~ $</span> <span class="cmd">claude</span></div>
+          <div class="out">→ Authenticating...</div>
+          <div class="out">→ Connecting to Anthropic API...</div>
+          <div><span class="prompt">claude&gt;</span> <span class="cmd">help me build a landing page<span class="blink"></span></span></div>
+        </div>
+        <div class="compare-caption"><strong>Developer-only.</strong> Command line, npm, terminals, env files. If you didn't already code, you weren't getting in.</div>
+      </div>
+      <div class="compare-panel">
+        <span class="compare-label after">After · Desktop App</span>
+        <div class="desktop">
+          <div class="desktop-bar"><span class="dots"><span></span><span></span><span></span></span><span style="font-family: 'Inter', sans-serif; font-size: 12px; color: var(--text-muted); margin-left: 8px;">Claude · Desktop</span></div>
+          <div class="desktop-body">
+            <div class="desktop-side">
+              <div class="pill active">💬 Chat</div>
+              <div class="pill">🤖 Cowork</div>
+              <div class="pill">🛠️ Code</div>
+              <div class="pill">📁 Projects</div>
+            </div>
+            <div class="desktop-main">
+              <h4>Today's session</h4>
+              <div class="row teal">→ Building: Coffee shop website</div>
+              <div class="row green">✓ Sent 12 follow-up DMs</div>
+              <div class="row">📄 Drafting: October P&amp;L summary</div>
+              <div class="row">📊 Running: Lead-scoring script</div>
+            </div>
+          </div>
+        </div>
+        <div class="compare-caption"><strong>Anyone can use it.</strong> Visual interface. Drag &amp; drop. Click to start a session. No terminal. No code. No friction.</div>
+      </div>
+    </div>
+    <p class="small-text" style="margin-top: 24px;">This is why <span class="bold teal-text">we're all in this room.</span> Six weeks ago, a workshop like this would have been impossible.</p>
+  </div>
+  <div class="speaker-note">"This is the unlock. For 30 years, the most powerful tools have lived in terminals — and that's why only developers got to use them. April 14, that wall came down. The desktop app is what makes everything else in this room possible."</div>
+</div>
+
+<!-- 13. JACK WELCH / GE CAPITAL -->
+<div class="slide">
+  <p class="eyebrow">A History Lesson</p>
+  <h2 class="big-text">AI in 2026 = the <em>internet in 1995.</em></h2>
+  <div class="quote-block stagger">
+    <p class="quote-mark">"</p>
+    <p class="quote-body">If you don't have a website by the end of the year — your division dies.</p>
+    <p class="quote-attr">— Jack Welch · GE Capital · 1990s</p>
+  </div>
+  <div class="doubters-list">
+    <div class="doubter"><span class="doubter-x">✕</span><span><em>"The internet is a fad — it'll phase out."</em></span></div>
+    <div class="doubter"><span class="doubter-x">✕</span><span><em>"You can't actually buy things on the internet."</em></span></div>
+    <div class="doubter"><span class="doubter-x">✕</span><span><em>"My business doesn't need a website."</em></span></div>
+    <div class="doubter"><span class="doubter-x">✕</span><span><em>"It's not safe. Customers won't trust it."</em></span></div>
+  </div>
+  <div class="speaker-note">"Every single person who said one of those lines lost. The same exact conversations are happening today about AI — and the same people will lose again."</div>
+</div>
+
+<!-- 9. TEFL HEAVEN — with screenshot (swapped into this position) -->
+<div class="slide">
+  <p class="eyebrow">Case Study #1</p>
+  <h2 class="title">TEFL <em>Heaven.</em></h2>
+  <p class="subtitle">A whole business — copy, design, content — rebuilt with AI.</p>
+  <div class="case-frame">
+    <img src="assets/teflheaven.jpg" alt="TEFL Heaven homepage" />
+  </div>
+  <div class="speaker-note">"This site used to take an agency three months and tens of thousands of dollars. Now it lives, updates itself, and runs ads — with AI behind every piece. Same look. Same feel. A fraction of the cost."</div>
+</div>
+
+<!-- 10. WHAT CLAUDE CODE BUILT (no screenshot — site won't be made yet) -->
+<div class="slide">
+  <div class="stagger" style="display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 1180px;">
+    <div class="live-badge green"><span class="live-dot"></span> Just Built · In This Room</div>
+    <h2 class="title">Look at what Claude <em>just made.</em></h2>
+    <p class="subtitle">Live website. Built in front of you. While we were talking.</p>
+    <div class="built-window">
+      <div class="built-titlebar">
+        <div class="built-traffic"><span></span><span></span><span></span></div>
+        <div class="built-url"><span class="lock">🔒</span> your-new-website.com</div>
+      </div>
+      <div class="built-body">
+        <h3>A full website, made <em>while we talked</em><span class="built-cursor"></span></h3>
+        <p>Headers, copy, design, mobile responsiveness — all of it. No designer, no developer, no agency invoice.</p>
+        <p style="color: var(--text-muted); font-size: 0.9em;">Open the actual URL on the screen behind you. Refresh it. Open it on your phone. Let them feel it live.</p>
+        <div class="built-meta">
+          <span class="built-chip">Hosted</span>
+          <span class="built-chip">Responsive</span>
+          <span class="built-chip">SEO-ready</span>
+          <span class="built-chip">Editable by prompt</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="speaker-note">Walk the room through what it built. Refresh the actual page on the screen. Open it on your phone in front of them. Don't rush this moment — it's the proof.</div>
+</div>
+
+<!-- 11. CONNECT TO YOUR PHONE -->
+<div class="slide">
+  <p class="eyebrow">Try It Yourself</p>
+  <h2 class="title">Connect it to <em>your phone.</em></h2>
+  <p class="subtitle">Three steps. Two minutes. Then it's yours — wherever you are.</p>
+  <div class="step-grid stagger">
+    <div class="step-card">
+      <div class="step-num">1</div>
+      <h3>Scan the QR</h3>
+      <p>Open your camera and point it at the screen. Tap the link that appears.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">2</div>
+      <h3>Sign in</h3>
+      <p>Use the same email you set up your account with. One-tap from your phone.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">3</div>
+      <h3>You're connected</h3>
+      <p>Same Claude. Same projects. Now in your pocket — wherever you go.</p>
+    </div>
+  </div>
+  <div class="speaker-note">Hold up your own phone while you walk through it. Let Bow and the support team help anyone who gets stuck on step 2.</div>
+</div>
+
+<!-- 12. DAVE THE DINOSAUR — INTRO + PIPELINE -->
+<div class="slide">
+  <div class="stagger" style="display: flex; flex-direction: column; align-items: center; max-width: 1280px;">
+    <p class="eyebrow">Case Study #2 · A Bedtime Experiment</p>
+    <h2 class="title">Dave the <em>Dinosaur.</em></h2>
+    <p class="subtitle">My 8-year-old daughter Eva told a story into my phone one evening. By morning, it was a printed children's book.</p>
+    <div class="pipeline">
+      <div class="pipe-step">
+        <div class="pipe-emoji">🎙️</div>
+        <div class="pipe-label">Eva tells the story</div>
+        <div class="pipe-sub">Voice memo on phone</div>
+      </div>
+      <span class="pipe-arrow">→</span>
+      <div class="pipe-step">
+        <div class="pipe-emoji">📝</div>
+        <div class="pipe-label">AI transcribes</div>
+        <div class="pipe-sub">Voice to text</div>
+      </div>
+      <span class="pipe-arrow">→</span>
+      <div class="pipe-step">
+        <div class="pipe-emoji">📖</div>
+        <div class="pipe-label">AI writes the book</div>
+        <div class="pipe-sub">Per-page prompts</div>
+      </div>
+      <span class="pipe-arrow">→</span>
+      <div class="pipe-step">
+        <div class="pipe-emoji">🎨</div>
+        <div class="pipe-label">Runway makes art</div>
+        <div class="pipe-sub">API per illustration</div>
+      </div>
+      <span class="pipe-arrow">→</span>
+      <div class="pipe-step">
+        <div class="pipe-emoji">📚</div>
+        <div class="pipe-label">Cowork assembles</div>
+        <div class="pipe-sub">Final storybook</div>
+      </div>
+    </div>
+    <p class="small-text" style="margin-top: 24px; max-width: 720px;">Now read what came out of it. <span class="caveat">~ Eva's story, illustrated by AI ~</span></p>
+  </div>
+  <div class="speaker-note">Land this: "What used to be impossible for a parent — happens overnight now. Whatever Eva can imagine in words, AI can put on a page. Same engine that's going to run your business."</div>
+</div>
+
+<!-- =================== DAVE THE DINOSAUR BOOK PAGES (13–27) =================== -->
+
+<!-- 13. COVER -->
+<div class="slide book-slide">
+  <div class="book-page center stagger">
+    <span class="book-page-num">~ a story by Eva ~</span>
+    <div class="book-text center">
+      <h2>Dave the <em>Dinosaur.</em></h2>
+      <p>A bedtime story, told by an 8-year-old. Illustrated by AI overnight.</p>
+    </div>
+    <div class="book-cover-image">
+      <img src="assets/dave/dave-v2-01-cover.jpg" alt="Dave the Dinosaur — cover" />
+    </div>
+  </div>
+</div>
+
+<!-- 14. PAGE 1 -->
+<div class="slide book-slide">
+  <div class="book-page stagger">
+    <div class="book-image"><img src="assets/dave/dave-v2-02-splashing-in-the-pool.jpg" alt="Splashing in the pool" /></div>
+    <div class="book-text">
+      <span class="book-page-num">page one</span>
+      <h2>Splashing <em>in the pool.</em></h2>
+      <p>This is Dave. He's the biggest dinosaur in the whole valley — and he loves the water.</p>
+    </div>
+  </div>
+</div>
+
+<!-- 15. PAGE 2 -->
+<div class="slide book-slide">
+  <div class="book-page stagger">
+    <div class="book-image"><img src="assets/dave/dave-v2-03-youre-too-big-to-play.jpg" alt="You're too big to play with us" /></div>
+    <div class="book-text">
+      <span class="book-page-num">page two</span>
+      <h2>"You're <em>too big</em> to play with us."</h2>
+      <p>The other dinosaurs wouldn't let Dave join in. They said he was too big. Too clumsy. Too much.</p>
+    </div>
+  </div>
+</div>
+
+<!-- 16. PAGE 3 -->
+<div class="slide book-slide">
+  <div class="book-page stagger">
+    <div class="book-image"><img src="assets/dave/dave-v2-04-the-kindest-dinosaur.jpg" alt="The kindest dinosaur" /></div>
+    <div class="book-text">
+      <span class="book-page-num">page three</span>
+      <h2>But Dave was the <em>kindest</em> dinosaur.</h2>
+      <p>He always shared. He always smiled. He'd help anyone — even the dinosaurs who told him to go away.</p>
+    </div>
+  </div>
+</div>
+
+<!-- 17. PAGE 4 -->
+<div class="slide book-slide">
+  <div class="book-page stagger">
+    <div class="book-image"><img src="assets/dave/dave-v2-05-football-troubles.jpg" alt="Football troubles" /></div>
+    <div class="book-text">
+      <span class="book-page-num">page four</span>
+      <h2>Football <em>troubles.</em></h2>
+      <p>He tried to play football. He kicked too hard. The ball flew over the trees. Nobody invited him back.</p>
+    </div>
+  </div>
+</div>
+
+<!-- 18. PAGE 5 -->
+<div class="slide book-slide">
+  <div class="book-page stagger">
+    <div class="book-image"><img src="assets/dave/dave-v2-06-super-sad.jpg" alt="Super sad" /></div>
+    <div class="book-text">
+      <span class="book-page-num">page five</span>
+      <h2>Dave was <em>super sad.</em></h2>
+      <p>So he walked away. Past the pool. Past the football pitch. Past everyone who didn't want him.</p>
+    </div>
+  </div>
+</div>
+
+<!-- 19. PAGE 6 -->
+<div class="slide book-slide">
+  <div class="book-page stagger">
+    <div class="book-image"><img src="assets/dave/dave-v2-07-sleeping-under-the-tree.jpg" alt="Sleeping under the tree" /></div>
+    <div class="book-text">
+      <span class="book-page-num">page six</span>
+      <h2>He slept <em>under a tree.</em></h2>
+      <p>He had no home. No friends. Just the stars, the leaves, and the quiet sound of his big, kind heart.</p>
+    </div>
+  </div>
+</div>
+
+<!-- 20. PAGE 7 -->
+<div class="slide book-slide">
+  <div class="book-page stagger">
+    <div class="book-image"><img src="assets/dave/dave-v2-08-looking-for-work.jpg" alt="Looking for work" /></div>
+    <div class="book-text">
+      <span class="book-page-num">page seven</span>
+      <h2>So Dave went <em>looking for work.</em></h2>
+      <p>He'd find a way to be useful. Somewhere out there was a job big enough for a big, kind dinosaur.</p>
+    </div>
+  </div>
+</div>
+
+<!-- 21. PAGE 8 -->
+<div class="slide book-slide">
+  <div class="book-page stagger">
+    <div class="book-image"><img src="assets/dave/dave-v2-09-meeting-chang.jpg" alt="Meeting Chang" /></div>
+    <div class="book-text">
+      <span class="book-page-num">page eight</span>
+      <h2>And then he met <em>Chang.</em></h2>
+      <p>Chang was a builder. Strong arms, tired eyes — and a job that was just too big for one man.</p>
+    </div>
+  </div>
+</div>
+
+<!-- 22. PAGE 9 -->
+<div class="slide book-slide">
+  <div class="book-page stagger">
+    <div class="book-image"><img src="assets/dave/dave-v2-10-changs-struggles.jpg" alt="Chang's struggles" /></div>
+    <div class="book-text">
+      <span class="book-page-num">page nine</span>
+      <h2>Chang was <em>struggling.</em></h2>
+      <p>The logs were too heavy. The hill was too steep. The day was too long. He needed help — and he needed it fast.</p>
+    </div>
+  </div>
+</div>
+
+<!-- 23. PAGE 10 -->
+<div class="slide book-slide">
+  <div class="book-page stagger">
+    <div class="book-image"><img src="assets/dave/dave-v2-11-got-a-job.jpg" alt="Dave got a job" /></div>
+    <div class="book-text">
+      <span class="book-page-num">page ten</span>
+      <h2>Dave got <em>a job.</em></h2>
+      <p>Big, strong, kind Dave. The very thing that made him "too much" for the others — was exactly what Chang needed.</p>
+    </div>
+  </div>
+</div>
+
+<!-- 24. PAGE 11 -->
+<div class="slide book-slide">
+  <div class="book-page stagger">
+    <div class="book-image"><img src="assets/dave/dave-v2-12-got-a-wife.jpg" alt="Dave got a wife" /></div>
+    <div class="book-text">
+      <span class="book-page-num">page eleven</span>
+      <h2>Then Dave got <em>a wife.</em></h2>
+      <p>Her name was Daisy. She thought he was the most handsome dinosaur in the world. (She was right.)</p>
+    </div>
+  </div>
+</div>
+
+<!-- 25. PAGE 12 -->
+<div class="slide book-slide">
+  <div class="book-page stagger">
+    <div class="book-image"><img src="assets/dave/dave-v2-13-a-big-baby.jpg" alt="A big baby" /></div>
+    <div class="book-text">
+      <span class="book-page-num">page twelve</span>
+      <h2>And then — <em>a big baby.</em></h2>
+      <p>The biggest baby dinosaur the valley had ever seen. Just like his dad. Just as kind.</p>
+    </div>
+  </div>
+</div>
+
+<!-- 26. PAGE 13 -->
+<div class="slide book-slide">
+  <div class="book-page stagger">
+    <div class="book-image"><img src="assets/dave/dave-v2-14-everyone-plays.jpg" alt="Everyone plays with Dave" /></div>
+    <div class="book-text">
+      <span class="book-page-num">page thirteen</span>
+      <h2>Now <em>everyone</em> wants to play with Dave.</h2>
+      <p>The same dinosaurs who said he was too big — line up to be his friend now. Funny how that works.</p>
+    </div>
+  </div>
+</div>
+
+<!-- 27. THE END -->
+<div class="slide book-slide">
+  <div class="book-page center stagger">
+    <div class="book-cover-image" style="max-width: 460px;">
+      <img src="assets/dave/dave-v2-15-the-end.jpg" alt="The end" />
+    </div>
+    <div class="book-text center">
+      <span class="book-page-num">~ and that's the story ~</span>
+      <h2>The <em>End.</em></h2>
+      <p>Eva told the story. AI did the rest — overnight. <span class="caveat">~ and now we read it on the big screen ~</span></p>
+    </div>
+  </div>
+  <div class="speaker-note">Pause here. Let it sink in. "That story you just read — was an 8-year-old plus AI, in one night. Now imagine what your business looks like when AI does the same thing for your sales, your follow-ups, your content."</div>
+</div>
+
+<!-- 33. COWORK FOLLOW-UP DMs (Loom) -->
+<div class="slide">
+  <div class="stagger" style="display: flex; flex-direction: column; align-items: center; max-width: 1080px; width: 100%;">
+    <p class="eyebrow">Case Study · Cowork In Action</p>
+    <h2 class="title">Cowork did the <em>follow-up.</em></h2>
+    <p class="subtitle">Every person who showed interest in this workshop on Facebook — got a personal DM back. Without me. Watch.</p>
+    <div class="video-frame">
+      <iframe src="https://www.loom.com/embed/35c8767b80ea4d359a484c0ef0df6060" title="Cowork + Computer Use — Facebook Follow-up Demo" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+    </div>
+  </div>
+  <div class="speaker-note">Set the stakes before you press play: "Imagine if every lead, every comment, every interested person on social — got a real, personal follow-up. Without you lifting a finger. That's what just happened. And it's running right now, while we sit here."</div>
+</div>
+
+<!-- ===== SPECTRE MASTERMIND — CLOSER (slides 34–38) ===== -->
+
+<!-- 34. SPECTRE INTRO -->
+<div class="slide spectre-slide">
+  <div class="stagger" style="display: flex; flex-direction: column; align-items: center; max-width: 1100px;">
+    <div class="spectre-logo">
+      <div class="spectre-logo-mark">S</div>
+      <div class="spectre-tag">SPECTRE</div>
+    </div>
+    <p class="spectre-placeholder-note">~ logo placeholder · replace with final Spectre Mastermind logo ~</p>
+    <h2 class="title" style="margin-top: 24px;">Spectre <em>Mastermind.</em></h2>
+    <p class="subtitle">Where builders meet builders. Where AI gets installed, not just talked about.</p>
+    <p class="small-text" style="margin-top: 28px; font-family: 'Newsreader', Georgia, serif; font-style: italic; font-size: clamp(20px, 2.2vw, 28px); color: var(--text);">Is it okay if I share <span class="bold teal-text">a few offers</span> with you?</p>
+  </div>
+  <div class="speaker-note">Pause. Ask the question for real. Wait for a nod. "Yes? Good. Three options. From most accessible to deepest commitment. Pick the one that makes sense for where you are."</div>
+</div>
+
+<!-- 35. THREE OFFERS GRID -->
+<div class="slide">
+  <p class="eyebrow">Three ways to keep going</p>
+  <h2 class="title">Three offers. <em>Pick yours.</em></h2>
+  <p class="subtitle">From a one-hour brain-pick this afternoon — to a 3-month mastermind seat.</p>
+  <div class="offers-grid stagger">
+    <div class="offer-card">
+      <p class="offer-tier">Offer 01</p>
+      <h3 class="offer-title">3-Hour Build Session</h3>
+      <p class="offer-when">~ one-on-one with Mike ~</p>
+      <div class="offer-price">฿25,000</div>
+      <p class="offer-price-sub">3 hours of my time</p>
+      <ul class="offer-list">
+        <li>We build something real together</li>
+        <li>I teach you how to do it yourself</li>
+        <li>In-person or online — your call</li>
+        <li>Message me to book</li>
+      </ul>
+    </div>
+    <div class="offer-card featured">
+      <p class="offer-tier">Offer 02 · Recurring</p>
+      <h3 class="offer-title">Spectre Mastermind</h3>
+      <p class="offer-when">~ monthly meets ~</p>
+      <div class="offer-price">฿10,000</div>
+      <p class="offer-price-sub">/ 3 months · renewable</p>
+      <ul class="offer-list">
+        <li>2-hour group session every month</li>
+        <li>Exclusive room of AI builders</li>
+        <li>Latest workflows &amp; tools, every meet</li>
+        <li>Online while I'm in UK (Jun 14 – Aug 11)</li>
+      </ul>
+    </div>
+    <div class="offer-card">
+      <p class="offer-tier">Offer 03 · Today</p>
+      <h3 class="offer-title">VIP Hour</h3>
+      <p class="offer-when">~ today at 3pm ~</p>
+      <div class="offer-price">฿1,000</div>
+      <p class="offer-price-sub">1 hour · same venue</p>
+      <ul class="offer-list">
+        <li>Pick my brain on marketing &amp; AI</li>
+        <li>Bring your specific problem</li>
+        <li>Walk out with a plan</li>
+        <li>Happening right after this workshop</li>
+      </ul>
+    </div>
+  </div>
+  <div class="speaker-note">"Look at them all. Pick the one that fits where you are. If you want to taste it — VIP Hour. If you want to build something specific — 3-hour session. If you want the community for the long haul — Mastermind."</div>
+</div>
+
+<!-- 36. OFFER 1 — 3-HOUR SESSION -->
+<div class="slide">
+  <div class="stagger" style="display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 1280px;">
+    <p class="eyebrow">Offer 01 · One-on-One</p>
+    <h2 class="title">3 hours <em>of my time.</em></h2>
+    <div class="offer-detail">
+      <div class="offer-detail-price">
+        <p class="offer-detail-tier">Build Session</p>
+        <h3 class="offer-detail-title">Three hours. <em>One outcome.</em></h3>
+        <div class="offer-detail-amount">฿25,000</div>
+        <p class="offer-detail-amount-sub">flat · all-in · no upsell</p>
+        <span class="offer-detail-when"><span class="dot"></span> Book direct with Mike</span>
+      </div>
+      <div class="offer-detail-content">
+        <h3>You bring a real project. We build it.</h3>
+        <p>Three uninterrupted hours, one-on-one. We sit down with the thing you actually need to ship — a website, an AI workflow, a follow-up system, a sales deck — and we build it, together. You watch over my shoulder, you ask questions, you leave with the file and the recipe.</p>
+        <ul>
+          <li>In-person in Thailand, or online — your call depending on where you are</li>
+          <li>I teach as we build — so you can do it again, on your own, without me</li>
+          <li>No pre-call discovery, no sales theatre — just send a message and book</li>
+          <li>Walk out with a working asset and the playbook to repeat it</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="speaker-note">"This is for the person who has a specific thing they need built. Don't pay an agency 200k. Pay 25k, sit with me for 3 hours, leave with it built and the knowledge to do it yourself next time."</div>
+</div>
+
+<!-- 37. OFFER 2 — MASTERMIND -->
+<div class="slide">
+  <div class="stagger" style="display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 1280px;">
+    <p class="eyebrow">Offer 02 · The Long Game</p>
+    <h2 class="title">Spectre <em>Mastermind.</em></h2>
+    <div class="offer-detail">
+      <div class="offer-detail-price">
+        <p class="offer-detail-tier">Exclusive Group · Recurring</p>
+        <h3 class="offer-detail-title">Where AI builders <em>build together.</em></h3>
+        <div class="offer-detail-amount">฿10,000</div>
+        <p class="offer-detail-amount-sub">every 3 months · renewable</p>
+        <span class="offer-detail-when"><span class="dot"></span> Next session online · Jun 14 – Aug 11</span>
+      </div>
+      <div class="offer-detail-content">
+        <h3>Two hours a month. With the right people in the room.</h3>
+        <p>An exclusive group of business owners who are actively installing AI. Two hours, every month. Normally in person in Thailand — online while I'm in the UK from June 14 to August 11. You bring what you're building, what's broken, what you want to try. We push each other forward.</p>
+        <ul>
+          <li>2-hour group session every month for 3 months</li>
+          <li>Latest tools, workflows &amp; case studies — fresh each session</li>
+          <li>Small, curated room — real builders, no spectators</li>
+          <li>Renewable in 3-month blocks at the same rate</li>
+        </ul>
+        <div class="offer-stat">
+          <div class="offer-stat-num">+95%</div>
+          <div class="offer-stat-label"><strong>Goal-completion improvement</strong> when you have regular accountability meetings with peers. <em>(Association for Talent Development study.)</em></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="speaker-note">"This is the long game. You can't out-pace AI alone — but you can with a small room of people doing the same thing. The ATD stat is real: 95% better goal completion with regular peer accountability. That's what this room becomes."</div>
+</div>
+
+<!-- 38. OFFER 3 — VIP HOUR (closer, today @ 3pm) -->
+<div class="slide">
+  <div class="stagger" style="display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 1280px;">
+    <div class="live-badge"><span class="live-dot"></span> Happening Today · 3 PM</div>
+    <h2 class="title">VIP <em>Hour.</em></h2>
+    <div class="offer-detail">
+      <div class="offer-detail-price">
+        <p class="offer-detail-tier">Today Only · 3 PM</p>
+        <h3 class="offer-detail-title">One hour. <em>Your problem.</em></h3>
+        <div class="offer-detail-amount">฿1,000</div>
+        <p class="offer-detail-amount-sub">today · same venue · stay after</p>
+        <span class="offer-detail-when"><span class="dot"></span> Right here · 3 PM · today</span>
+      </div>
+      <div class="offer-detail-content">
+        <h3>If you only do one thing today — do this.</h3>
+        <p>Stay after the workshop. Bring your business, your problem, your half-built idea. For one hour, you get me on your specific challenge — marketing, AI, automations, whatever's stuck. You walk out with a plan and the first piece already built.</p>
+        <ul>
+          <li>One full hour at this venue, starting at 3 PM</li>
+          <li>Bring your laptop and your specific business question</li>
+          <li>I work on <em>your</em> problem, not a generic example</li>
+          <li>1,000 baht — less than tonight's dinner</li>
+        </ul>
+        <p style="margin-top: 18px; font-family: 'Newsreader', Georgia, serif; font-style: italic; font-size: clamp(18px, 1.8vw, 22px); color: var(--text);">If you've been on the fence all evening — <span class="bold teal-text">this is your easy yes.</span></p>
+      </div>
+    </div>
+  </div>
+  <div class="speaker-note">This is the closer. Stay warm but direct: "If you've been nodding along all evening and you don't know where to start — start here. One thousand baht. Stay in your seat. Three pm. Bring your laptop, bring the problem, walk out with the answer."</div>
+</div>
+
+<!-- ============================================================
+     NAVIGATION + HELP
+     ============================================================ -->
+<div class="nav">
+  <button class="nav-btn" id="prev-btn" aria-label="Previous slide">←</button>
+  <div class="nav-counter"><span id="cur">1</span> / <span id="total">38</span></div>
+  <button class="nav-btn" id="next-btn" aria-label="Next slide">→</button>
+</div>
+
+<div class="help-toast" id="help-toast">
+  <kbd>←</kbd> <kbd>→</kbd> navigate &nbsp;·&nbsp; <kbd>N</kbd> notes &nbsp;·&nbsp; <kbd>B</kbd> blackout &nbsp;·&nbsp; <kbd>F</kbd> fullscreen
+</div>
+
+<script>
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const total = slides.length;
+  let current = 0;
+
+  document.getElementById('total').textContent = total;
+  const progressBar = document.getElementById('progress-bar');
+
+  // Animate counters on stat-num[data-target]
+  function animateCounters(slideEl) {
+    slideEl.querySelectorAll('.stat-num[data-target]').forEach(el => {
+      const target = parseFloat(el.dataset.target);
+      const dur = 900;
+      const start = performance.now();
+      const startVal = 0;
+      function tick(now) {
+        const t = Math.min(1, (now - start) / dur);
+        const eased = 1 - Math.pow(1 - t, 3);
+        const val = Math.round((startVal + (target - startVal) * eased) * 100) / 100;
+        el.textContent = Number.isInteger(target) ? Math.round(val) : val.toFixed(1);
+        if (t < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    });
+  }
+
+  function show(i) {
+    if (i < 0 || i >= total) return;
+    slides[current].classList.remove('active');
+    current = i;
+    slides[current].classList.add('active');
+    document.getElementById('cur').textContent = current + 1;
+    progressBar.style.width = ((current + 1) / total * 100) + '%';
+    // Pause any embedded iframes from the slide we're leaving
+    slides.forEach((s, idx) => {
+      if (idx !== current) {
+        s.querySelectorAll('iframe').forEach(f => {
+          const src = f.getAttribute('src');
+          if (src) { f.setAttribute('src', src); }
+        });
+      }
+    });
+    history.replaceState(null, '', '#' + (current + 1));
+    animateCounters(slides[current]);
+  }
+  function next() { if (current < total - 1) show(current + 1); }
+  function prev() { if (current > 0) show(current - 1); }
+
+  document.getElementById('next-btn').addEventListener('click', next);
+  document.getElementById('prev-btn').addEventListener('click', prev);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.target.tagName === 'IFRAME') return;
+    const nextKeys = ['ArrowRight', ' ', 'PageDown', 'ArrowDown', 'Enter'];
+    const prevKeys = ['ArrowLeft', 'PageUp', 'ArrowUp', 'Backspace'];
+    if (nextKeys.includes(e.key)) { e.preventDefault(); next(); return; }
+    if (prevKeys.includes(e.key)) { e.preventDefault(); prev(); return; }
+    if (e.key === 'Home') { e.preventDefault(); show(0); return; }
+    if (e.key === 'End') { e.preventDefault(); show(total - 1); return; }
+    if (e.key === 'b' || e.key === 'B' || e.key === '.') {
+      e.preventDefault();
+      document.body.classList.toggle('blackout');
+      return;
+    }
+    if (e.key === 'n' || e.key === 'N') {
+      document.body.classList.toggle('show-notes');
+    }
+    if (e.key === 'f' || e.key === 'F') {
+      if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+      else document.exitFullscreen();
+    }
+    if (e.key === 'Escape') {
+      document.body.classList.remove('blackout');
+    }
+  });
+
+  // Initial state
+  progressBar.style.width = (1 / total * 100) + '%';
+  animateCounters(slides[0]);
+
+  // Deep link: #5 jumps to slide 5
+  const startHash = parseInt(window.location.hash.replace('#', ''), 10);
+  if (!isNaN(startHash) && startHash >= 1 && startHash <= total) {
+    show(startHash - 1);
+  }
+
+  // Auto-hide help toast after 6s
+  setTimeout(() => {
+    const t = document.getElementById('help-toast');
+    t.style.opacity = '0';
+    t.style.transform = 'translateY(-8px)';
+    setTimeout(() => t.remove(), 700);
+  }, 6000);
+</script>
+
+</body>
+</html>
